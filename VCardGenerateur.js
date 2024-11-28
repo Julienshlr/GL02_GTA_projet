@@ -15,34 +15,34 @@ VCardGenerateur.prototype.validerTelephone = function(valeur) {
 };
 
 VCardGenerateur.prototype.validerEmail = function(valeur) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valeur);
+    return /^[\da-zA-ZÀ-ÖØ-öø-ÿ._-]+@[\da-zA-ZÀ-ÖØ-öø-ÿ]+\.[\da-zA-ZÀ-ÖØ-öø-ÿ]+$/.test(valeur);
 };
 
 VCardGenerateur.prototype.validerAdresse = function(valeur) {
-    return valeur === "" || /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s,\-\.\']+$/.test(valeur);
+    return valeur === "" || /^\d+\s+[\da-zA-ZÀ-ÖØ-öø-ÿ\s-]+,\s+[a-zA-ZÀ-ÖØ-öø-ÿ\s-]+\s+\d{5}$/.test(valeur);
 };
 
 // Méthode pour générer le contenu VCard
 VCardGenerateur.prototype.genererVCard = function(data) {
-    const { nom, prenom, telephone, email, adresse, uri } = data;
+    const { prenom, nom, telephone, email, adresse, uri } = data;
 
     if (!this.validerNomPrenom(nom) || !this.validerNomPrenom(prenom)) {
-        throw new Error("Nom ou prénom invalide.");
+        throw new Error("Nom ou prénom invalide. Utilisez uniquement des caractères.");
     }
     if (!this.validerTelephone(telephone)) {
-        throw new Error("Numéro de téléphone invalide. Format attendu : 5 blocs de 2 chiffres séparés par un espace.");
+        throw new Error("Numéro de téléphone invalide. Format attendu : xx xx xx xx xx");
     }
     if (!this.validerEmail(email)) {
-        throw new Error("Adresse email invalide.");
+        throw new Error("Adresse email invalide. Format attendu : partieLocale@domaine.extension");
     }
     if (!this.validerAdresse(adresse)) {
-        throw new Error("Adresse invalide.");
+        throw new Error("Adresse invalide. Format attendu : numeroRue nomRue, ville codePostal");
     }
 
     return `
 BEGIN:VCARD
 VERSION:4.0
-FN:${nom} ${prenom}
+FN:${prenom} ${nom}
 TEL:${telephone}
 EMAIL:${email}
 ADR:${adresse}

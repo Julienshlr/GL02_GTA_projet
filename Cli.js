@@ -4,8 +4,8 @@ const VCardGenerateur = require('./VCardGenerateur.js');
 cli
     .version('vcard-cli 1.0.0')
     .command('vcard', 'Génère un fichier VCard')
-    .argument('<nom>', 'Nom de l\'enseignant')
     .argument('<prenom>', 'Prénom de l\'enseignant')
+    .argument('<nom>', 'Nom de l\'enseignant')
     .argument('<telephone>', 'Numéro de téléphone')
     .argument('<email>', 'Adresse email')
     .option('--adresse <adresse>', 'Adresse complète', { default: "" })
@@ -15,8 +15,8 @@ cli
         try {
             const generateur = new VCardGenerateur();
             const data = {
-                nom: args.nom,
                 prenom: args.prenom,
+                nom: args.nom,
                 telephone: args.telephone,
                 email: args.email,
                 adresse: options.adresse,
