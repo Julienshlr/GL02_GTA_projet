@@ -2,20 +2,19 @@
     "name": "gta-cli",
     "version": "1.0.0",
     "description": "Gestionnaire permettant la création d'exmamens au format GIFT et de VCard",
-    "main": "caporalCli.js",
+    "main": "Cli.js",
     "scripts": {
-      "test": "jasmine"
+        "test": "jasmine"
     },
     "keywords": [],
     "author": "GTA",
     "license": "",
     "dependencies": {
-      "@caporal/core": "^3.0.2",
-      "vega": "^5.17.0",
-      "vega-lite": "^4.17.0"
+        "@caporal/core": "^3.0.2",
+        "vega": "^5.17.0",
+        "vega-lite": "^4.17.0"
     },
     "devDependencies": {
-      "jasmine": "^3.6.3"
+        "jasmine": "^3.6.3"
     }
-  }
-  
+}
