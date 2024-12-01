@@ -320,7 +320,7 @@ GiftParser.prototype.answers = function(input){
 
 	}
 	let type_question; 
-	if (choices.length > 0 || type_question=="partial_credit" {
+	if (choices.length > 0 || type_question=="partial_credit") {
 		if (input.length > 0){
 			let test = true;
 			for (let i = 0; i < input.length; i++){
