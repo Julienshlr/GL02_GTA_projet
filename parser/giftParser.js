@@ -1,13 +1,13 @@
 
 
 let Question = require('../Question.js');
-let CollectionQuestion = require('../CollectionQuestion.js');
+let CollectionQuestions = require('../CollectionQuestions.js');
 
 // giftParser
 
 let GiftParser = function(sTokenize, sParsedSymb){
     // The list of GIFT parsed from the input file.
-    this.parsedQuestion = [];
+    this.parsedQuestion = CollectionQuestions;
 	// this.symb = ['//', '::', '{', '}', '[', ']', '=', '~', '#', ' '];
 	this.showTokenize = sTokenize;
 	this.showParsedSymbols = sParsedSymb;
@@ -190,7 +190,7 @@ GiftParser.prototype.gift = function(input){
 		if (title == ''){
 			this.errMsg('Missing title', q);
 		}
-		this.parsedQuestion.push(q);
+		this.parsedQuestion.ajouterQuestion(q);
 
 		return true;
 	}else{
@@ -263,8 +263,7 @@ GiftParser.prototype.answers = function(input){
 			numeric_answer = numeric_answer_tab.join('');
 			numeric_answer = this.removeSpaces(numeric_answer);
 			correct_answers.push(numeric_answer);
-
-			}
+			
 		}
 		input = this.reduce(input);
 		Question.nbNumeric++;
@@ -292,6 +291,7 @@ GiftParser.prototype.answers = function(input){
 			input = this.reduce(input);
 			if (!this.check('%', input)){
 				type_question="partial_credit"; //crédit partiel avec pourcentage (commentaire et pourcentage inclus dans reponse)
+			}
 			while (!this.check('=', input) && !this.check('~', input)&& !this.check('}', input)){
 				answer_tab.push(this.next(input));
 				input = this.reduce(input);
@@ -319,8 +319,7 @@ GiftParser.prototype.answers = function(input){
 		}
 
 	}
-	let type_question; 
-	if (choices.length > 0 || type_question=="partial_credit" {
+	if (choices.length > 0 || type_question=="partial_credit") {
 		if (input.length > 0){
 			let test = true;
 			for (let i = 0; i < input.length; i++){
