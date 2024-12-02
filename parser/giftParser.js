@@ -331,7 +331,7 @@ GiftParser.prototype.answers = function(input){
                 choices.push(answer);
             }
         }
-    }
+    
 
     if (choices.length > 0 ) {
 		for (let i = 0; i < correct_answer.length; i++){// si choix existent, mise des bonnes reponses dans les choix
