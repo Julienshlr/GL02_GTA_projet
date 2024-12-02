@@ -4,21 +4,20 @@ const path = require('path');
 const GiftParser = require('./parser/giftParser.js');
 const CollectionQuestions = require('./CollectionQuestion.js');
 const VCardGenerateur = require('./VCardGenerateur.js');
-const GiftParser = require("./parser/giftParser");
-const fs = require('fs');
+
 
 function parseData(filePath) {
-  const data = fs.readFile(filePath, 'utf8', function (err,data) {
-	console.log(data);}
-			);
-  let analyzer = new GiftParser(false, false);
-  analyzer.parse(data);
+  const data = fs.readFileSync(filePath, 'utf8');  
+		  let analyzer = new GiftParser(false, false);
+		  analyzer.parse(data);
 
-  if (analyzer.errorCount != 0) {
-    console.log("The .gift file contains errors.");
-  }
+		  if (analyzer.errorCount != 0) {
+			console.log("The .gift file contains errors.");
+		  }
+			//console.log(analyzer.parsedQuestion);
+		  return analyzer.parsedQuestion;
+		  
 
-  return analyzer.parsedQuestion;
 }
 
 const collectionExamen = new CollectionQuestions();
@@ -161,11 +160,18 @@ cli
     .argument('<titre>', 'mot présent dans le titre de la question')
 	    .action(({ args, options, logger }) => {
         try {
-				let listQ= parseData("/SujetB_data/");
-				for(let i=0; i<=listQ.questions.length; i++){
-					if(listQ.questions[i].id==args.id || listQ.questions[i].type==args.type || listQ.questions[i].titre.includes(args.titre)){
-						console.log('id:'+listQ.questions[i].id+'/n type:'+listQ.questions[i].type+'/n titre:'+listQ.questions[i].titre);
-						console.log('/n /n');
+				let listData = fs.readdirSync('SujetB_data');
+				let listQ=[];
+				let filepath;
+				for(let i=0; i<listData.length; i++){
+					filepath='SujetB_data/'+String(listData[i]);
+					listQ= listQ.concat(parseData(filePath));
+				}
+				
+				for(let i=0; i<listQ.length; i++){
+					if(listQ[i].id==args.id || listQ[i].type==args.type || listQ[i].titre.includes(args.titre)){
+						console.log('id:'+listQ[i].id+'\n type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+						console.log('\n \n');
 					}
 					
 				}
