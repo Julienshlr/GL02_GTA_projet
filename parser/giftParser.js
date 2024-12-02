@@ -169,7 +169,7 @@ GiftParser.prototype.gift = function(input){
 
         question_text = this.removeSpaces(question_text);
 
-        let q = new Question(null, title, type_question, question_text, ca, choices);
+        let q = new Question(null, title, type_question, question_text, choices, ca);
         if (title == ''){
             this.errMsg('Missing title', q);
         }
