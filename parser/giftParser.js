@@ -282,6 +282,8 @@ GiftParser.prototype.answers = function(input){
 		correct_answers.push('FALSE');
 		return {tq: "true_false", ca: correct_answers, choices: choices, in: input};
 	}
+
+
 	
 
     // Autres types de questions
