@@ -225,29 +225,46 @@ GiftParser.prototype.answers = function(input){
     let type_question='';  // Déclaration ici, une seule fois au début de la fonction.
     
     // plages numériques, réponse : tolérance et inf .. sup sont stockés tels quels dans l'objet 
+	//prendres plusieurs options en compte
     if (this.check('#', input)){
         input = this.reduce(input);
-        while (!this.check('}', input)){
-            let numeric_answer_tab = [];
-            let numeric_answer = '';
-            
+            while (input[0] == ' ' || input[0] == '\n' || input[0] == '\r'){
+				input = this.reduce(input);
+			}
+			if (this.check('=', input)){
+				input = this.reduce(input);
+				type_question = "numeric_partial_credit";
+		    }
             while (!this.check('}', input)){
-                numeric_answer_tab.push(this.next(input));
-                input = this.reduce(input);
-                if (this.check(':', input)){
-                    type_question = "numeric";
-                }
-                if (this.check2Char('..', input)){
-                    type_question = "numeric_intervals";
-                }
+				let numeric_answer_tab = [];
+				let numeric_answer = '';
+				if (this.check('=', input)){
+					input = this.reduce(input);
+				}
+				while (!this.check('=', input) && !this.check('}', input)){
+					numeric_answer_tab.push(this.next(input));
+					input = this.reduce(input);
+					if (this.check(':', input)){
+						if( type_question=='numeric_partial_credit'){
+							type_question = "numeric_margin_partial_credit";
+						}else{
+							type_question = "numeric_margin";
+						}
+					}
+					if (this.check2Char('..', input)){
+						if( type_question=='numeric_partial_credit'){
+							type_question = "numeric_intervals_partial_credit";
+						}else{
+							type_question = "numeric_intervals";
+						}
+					}
             }
             numeric_answer = numeric_answer_tab.join('');
             numeric_answer = this.removeSpaces(numeric_answer);
             correct_answers.push(numeric_answer);
-        }
-        input = this.reduce(input);
-        Question.nbNumeric++;
-        return {tq: type_question, ca: correct_answers, choices: choices, in: input};
+            input = this.reduce(input);
+            Question.nbNumeric++;
+            return {tq: type_question, ca: correct_answers, choices: choices, in: input};
     }
 
     // Vrai / Faux
