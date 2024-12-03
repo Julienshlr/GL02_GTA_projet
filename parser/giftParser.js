@@ -199,6 +199,9 @@ GiftParser.prototype.title = function(input){
 // <text>
 GiftParser.prototype.text = function(input){
     let text_tab = [];
+	while (input[0] == ' ' || input[0] == '\n' || input[0] == '\r'){
+        input = this.reduce(input);
+    }
     while (!this.check('{', input) && input.length > 0){
         text_tab.push(this.next(input));
         input = this.reduce(input);
