@@ -266,16 +266,16 @@ GiftParser.prototype.answers = function(input){
 					numeric_answer_tab.push(this.next(input));
 					input = this.reduce(input);
 					if (this.check(':', input)){
-						if( type_question=='numeric_partial_credit'){
+						if( type_question== "numeric_partial_credit"){
 							type_question = "numeric_margin_partial_credit";
-						}else{
+						}else if(type_question== ''){
 							type_question = "numeric_margin";
 						}
 					}
 					if (this.check2Char('..', input)){
 						if( type_question=='numeric_partial_credit'){
 							type_question = "numeric_intervals_partial_credit";
-						}else{
+						}else if(type_question== ''){
 							type_question = "numeric_intervals";
 						}
 					}
@@ -381,24 +381,52 @@ GiftParser.prototype.answers = function(input){
 			choices.push(correct_answers[i]);
 		}
         if (input.length > 0){
-            let test = true;
-            for (let i = 0; i < input.length; i++){
-                if (input[i] !== ' ' && input[i] !== '\n' && input[i] !== '\r'){
+			let test = true;
+			let test_input= input;
+            for (let i = 0; i < test_input.length; i++){
+				test_input=this.reduce(test_input);
+                if (!this.check('\r', test_input) && !this.check('\n', test_input) && !this.check(' ', test_input)){
                     test = false;
                 }
+				
             }
             if (test){  
 				if(type_question!='multiple_choice_partial_credit'){ //choix multiples classiques
 					type_question = "multiple_choice";
-					Question.nbMulipleChoice++;
 				}
             } else {
-                type_question = "missing_word";
+                type_question = "multiple_choice_missing_word";
+            }
+        }else{
+				if(type_question!='multiple_choice_partial_credit'){ //choix multiples classiques
+					type_question = "multiple_choice";
+				}
+		}
+    } else if(type_question==''){
+        if (input.length > 0){
+            let test = true;
+			let test_input= input;
+            for (let i = 0; i < test_input.length; i++){
+				test_input=this.reduce(test_input);
+                if (!this.check('\r', test_input) && !this.check('\n', test_input) && !this.check(' ', test_input)){
+                    test = false;
+                }
+				
+            }
+            if (test){  
+				if(type_question!='short_answer_partial_credit'){ 
+					type_question = "short_answer"; //questions classiques à une reponse
+				}
+            } else {
+                type_question = "short_answer_missing_word";
                 Question.nbMissingWord++;
             }
-        }
-    } else if(type_question==''){
-        type_question = "short_answer";  //questions simples
+        } else{
+			if(type_question!='short_answer_partial_credit'){ 
+					type_question = "short_answer"; //questions classiques à une reponse
+				}
+		}
+			
     }
 
     return {tq: type_question, ca: correct_answers, choices: choices, in: input};
