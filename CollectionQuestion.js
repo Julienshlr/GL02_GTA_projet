@@ -1,40 +1,86 @@
+const fs = require('fs');
+const path = require('path');
+
 // Classe permettant la création d'une collection de questions
-
 var CollectionQuestions = function() {
-    this.questions = [];
-};
+    this.tempFolder = path.join(__dirname, 'temp');
+    if (!fs.existsSync(this.tempFolder)) {
+        fs.mkdirSync(this.tempFolder);
+    }
 
-// Méthode pour ajouter une question
-CollectionQuestions.prototype.ajouterQuestion = function(question) {
-    var existe = this.questions.some(q => q.id === question.id);
-    if (!existe) {
-        this.questions.push(question);
-        console.log(`Question "${question.titre}" ajoutée avec succès.`);
-    } else {
-        console.log(`La question avec l'ID "${question.id}" existe déjà dans la collection.`);
+    this.tempFile = path.join(this.tempFolder, 'temp_questions.gift');
+    if (!fs.existsSync(this.tempFile)) {
+        fs.writeFileSync(this.tempFile, '', 'utf-8');
     }
 };
 
-// Méthode pour retirer une question par son id
-CollectionQuestions.prototype.retirerQuestion = function(id) {
-    var index = this.questions.findIndex(q => q.id === id);
-    if (index !== -1) {
-        var questionRetiree = this.questions.splice(index, 1);
-        console.log(`Question "${questionRetiree[0].titre}" retirée avec succès.`);
-    } else {
-        console.log(`Aucune question trouvée avec l'ID "${id}".`);
+// Méthode pour ajouter une question au fichier temporaire
+CollectionQuestions.prototype.ajouterQuestionTemp = function(questionTexte) {
+    const contenuTemp = fs.readFileSync(this.tempFile, 'utf-8').trim();
+
+    // Ajouter la question avec gestion des lignes vides
+    const nouveauContenu = contenuTemp
+        ? `${contenuTemp}\n\n${questionTexte}` // Ajouter avec saut de ligne si le fichier n'est pas vide
+        : questionTexte; // Ajouter sans saut de ligne si le fichier est vide
+
+    fs.writeFileSync(this.tempFile, nouveauContenu, 'utf-8');
+    return true; // Retourne true pour indiquer que la question a été ajoutée
+};
+
+// Méthode pour retirer une question du fichier temporaire
+CollectionQuestions.prototype.retirerQuestionTemp = function (titre) {
+    try {
+        // Charger le contenu actuel du fichier et normaliser les sauts de ligne
+        const contenuTemp = fs.readFileSync(this.tempFile, 'utf-8');
+
+        // Expression régulière pour capturer la question avec son contexte
+        const regexQuestion = new RegExp(`(?:^|\\n)(::${titre}::.*?)(?:::|$)`, 's');
+        const match = contenuTemp.match(regexQuestion);
+
+        if (!match) {
+            return false; // Si aucune question correspondante n'est trouvée
+        }
+
+        let [blocCorrespondant] = match; // Récupérer le bloc correspondant
+
+        const regexBloc = new RegExp(`(?:^|\\n)(::${titre}::.*?)(?:\\n::)`, 's');
+        const matchBloc = blocCorrespondant.match(regexBloc);
+
+        if (matchBloc) {
+            blocCorrespondant = blocCorrespondant.replace(/\n::$/, ''); // Supprimer les :: à la fin du bloc
+        }
+
+        let nouvelleListe;
+
+        if (contenuTemp.startsWith(blocCorrespondant) && contenuTemp.endsWith(blocCorrespondant)) {
+            // Si la question est en première position et en dernière
+            nouvelleListe = contenuTemp.replace(blocCorrespondant, '').trim();
+        }
+        else if (contenuTemp.startsWith(blocCorrespondant)) {
+            // Si la question est en première position
+            nouvelleListe = contenuTemp.replace(blocCorrespondant + '\n', '').trim();
+        } 
+        else {
+            // Si la question est ailleurs
+            nouvelleListe = contenuTemp.replace(blocCorrespondant, '').trim();
+        }
+
+        // Réécrire le contenu du fichier sans le dernier saut de ligne
+        // On retire un saut de ligne supplémentaire s'il y en a en fin de fichier
+        fs.writeFileSync(this.tempFile, nouvelleListe + (nouvelleListe ? '\n' : ''), 'utf-8');
+        return true; // Indique que la suppression a réussi
+    } catch (error) {
+        throw new Error(`Erreur lors de la suppression de la question : ${error.message}`);
     }
 };
 
-// Méthode pour lister toutes les questions
-CollectionQuestions.prototype.listerQuestions = function() {
-    if (this.questions.length === 0) {
-        console.log("La collection de questions est vide.");
+// Méthode pour lister toutes les questions de l'examen en cours de création
+CollectionQuestions.prototype.listerQuestionsTemp = function() {
+    const contenuTemp = fs.readFileSync(this.tempFile, 'utf-8');
+    if (!contenuTemp.trim()) {
+        return false;
     } else {
-        console.log("Liste des questions :");
-        this.questions.forEach((q, index) => {
-            console.log(`${index + 1}. ${q.titre} (ID: ${q.id})`);
-        });
+        return contenuTemp;
     }
 };
 
