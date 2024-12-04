@@ -30,7 +30,7 @@ function generateExamProfile(filePaths) {
 
       // compter les types de questions détectés
       parser.parsedQuestion.forEach((question) => {
-        const type = question.type_question;
+        const type = question.type;
         if (type) {
           questionTypesCount[type] = (questionTypesCount[type] || 0) + 1;
           console.log(`Question type: ${type}, count: ${questionTypesCount[type]}`); // suvi dans la console
