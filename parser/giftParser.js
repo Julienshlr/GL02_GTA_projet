@@ -1,5 +1,4 @@
 let Question = require('../Question.js');
-let CollectionQuestion = require('../CollectionQuestion.js');
 
 // giftParser
 
