@@ -200,7 +200,14 @@ cli
 					filepath='SujetB_data/'+String(listData[i]);
 					listQ= listQ.concat(parseData(filepath));
 				}
-				if(options.type=="default" && options.titre!="default" && options.motcle!="default"){
+				if(options.type!="default" && options.titre!="default" && options.motcle!="default"){
+					for(let i=0; i<listQ.length; i++){
+						if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle) && listQ[i].type==options.type){
+							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+							console.log('\n \n');
+						}
+					}
+				}else if(options.type=="default" && options.titre!="default" && options.motcle!="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle)){
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
