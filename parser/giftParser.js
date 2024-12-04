@@ -43,12 +43,17 @@ GiftParser.prototype.tokenize = function(data){
             element_tab.push(this.next(data));
             data = this.reduce(data);
             // le reste de la question
-            while (!this.check2Char('//', data) && !this.check2Char('::', data) && data.length > 0){
+            while (!this.check2Char('::', data) && data.length > 0){
+				if(this.check2Char('//', data)){
+					while(!this.check('\n', data) && !this.check('\r', data)){
+						data=this.reduce(data);
+					}
+				}
                 element_tab.push(this.next(data));
                 data = this.reduce(data);
             }
 
-        }else if (this.check2Char('//', data)){// commentaire
+        }else if (this.check2Char('//', data)){// commentaires avant le 1er titre
             element_tab.push(this.next(data));
             data = this.reduce(data);
             element_tab.push(this.next(data));
@@ -145,7 +150,7 @@ GiftParser.prototype.gift = function(input){
         input = output.in;
 
         // Texte / réponses
-        let type_question = null;
+        let type_question = 'description';
         let ca = [];
         let choices = [];
 
@@ -158,7 +163,7 @@ GiftParser.prototype.gift = function(input){
                 input = answers.in;
                 type_question = answers.tq;
                 ca.push(answers.ca);
-                choices.push(answers.choices);
+				choices.push(answers.choices);
             }
             if (input.length > 0){ // texte
                 output = this.text(input);
@@ -209,6 +214,16 @@ GiftParser.prototype.text = function(input){
     let text = text_tab.join('');
     return {in: input, t: text};
 }
+
+GiftParser.prototype.deleteFeedback = function(input){ //suppression des commentaires des questions pour facilité de manipulation
+	if(this.check('#', input)){
+		while(!this.check('=',input) && !this.check('~',input) && !this.check('}',input)){
+			input=this.reduce(inpute);
+		}
+	}
+	return input;
+}
+
 
 GiftParser.prototype.answers = function(input){
 
@@ -261,6 +276,7 @@ GiftParser.prototype.answers = function(input){
 							type_question = "numeric_intervals";
 						}
 					}
+				}
             }
             numeric_answer = numeric_answer_tab.join('');
             numeric_answer = this.removeSpaces(numeric_answer);
@@ -307,6 +323,9 @@ GiftParser.prototype.answers = function(input){
 	
 
     // Autres types de questions
+	while (!this.check('=', input) && !this.check('~', input)){
+		input = this.reduce(input);
+	}
     while (!this.check('}', input)){
         let answer_tab = [];
         let answer = '';
@@ -376,7 +395,6 @@ GiftParser.prototype.answers = function(input){
         }
     } else if(type_question==''){
         type_question = "short_answer";  //questions simples
-        
     }
 
     return {tq: type_question, ca: correct_answers, choices: choices, in: input};
