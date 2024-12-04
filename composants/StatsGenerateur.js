@@ -1,7 +1,16 @@
+// Import des bibliothèques nécessaires
+const fs = require("fs");
+const VegaLite = require("vega-lite");
+const GiftParser = require("../parser/giftParser");
+
 /**
  * Fonction principale pour générer le profil statistique des examens
  * @param {string[]} filePaths - liste des chemins vers les fichiers GIFT
  */
+const examFiles = [
+  "../examens/test.gift",
+];
+
 function generateExamProfile(filePaths) {
   if (!filePaths || filePaths.length === 0) {
     console.error("Erreur : Aucun fichier GIFT fourni.");
@@ -10,6 +19,7 @@ function generateExamProfile(filePaths) {
 
   const questionTypesCount = {}; // stocke le nombre de chaque type de question
   const parser = new GiftParser(false, false); // initialiser le parser avec options
+  
 
   // parcourir tous les fichiers fournis
   filePaths.forEach((filePath) => {
@@ -22,6 +32,7 @@ function generateExamProfile(filePaths) {
         const type = question.type_question;
         if (type) {
           questionTypesCount[type] = (questionTypesCount[type] || 0) + 1;
+          console.log(`Question type: ${type}, count: ${questionTypesCount[type]}`); // suvi dans la console
         }
       });
     } catch (error) {
