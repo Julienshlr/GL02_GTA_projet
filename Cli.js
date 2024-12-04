@@ -2,7 +2,7 @@ const cli = require('@caporal/core').default;
 const fs = require('fs');
 const path = require('path');
 const GiftParser = require('./parser/giftParser.js');
-const CollectionQuestions = require('./CollectionQuestion.js');
+const CollectionQuestion = require('./CollectionQuestion.js');
 const VCardGenerateur = require('./VCardGenerateur.js');
 
 const collectionExamen = new CollectionQuestion();
