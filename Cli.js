@@ -56,7 +56,7 @@ cli
 
 
     // Commande pour ajouter une question
-    .command('add-question', 'Ajouter une question à l\'examen temporaire')
+    .command('add-question', 'Ajouter une question à l\'examen en cours de création')
     .argument('<fichier>', 'Nom du fichier dans SujetB_data (sans extension)')
     .argument('<titreQuestion>', 'Titre de la question à ajouter')
     .action(({ args, logger }) => {
@@ -67,7 +67,7 @@ cli
             const questionsExistantes = contenuTemp.split('\n').filter(line => line.startsWith('::')).length;
     
             if (questionsExistantes >= 20) {
-                logger.error('Vous ne pouvez pas ajouter plus de 20 questions à l\'examen temporaire.');
+                logger.error('Vous ne pouvez pas ajouter plus de 20 questions à l\'examen.');
                 return;
             }
     
@@ -112,7 +112,7 @@ cli
     })
 
     // Commande pour retirer une question
-    .command('remove-question', 'Retirer une question de l\'examen en cours')
+    .command('remove-question', 'Retirer une question de l\'examen en cours de création')
     .argument('<titreQuestion>', 'Titre de la question à retirer')
     .action(({ args, logger }) => {
         try {
@@ -128,7 +128,7 @@ cli
     })
 
     // Commande pour exporter l'examen
-    .command('export-exam', 'Exporter l\'examen en cours au format .gift')
+    .command('export-exam', 'Exporter l\'examen en cours de création au format .gift')
     .argument('<nomDossier>', 'Nom du dossier de destination')
     .argument('<nomFichier>', 'Nom du fichier de destination (sans extension)')
     .action(({ args, logger }) => {
@@ -174,7 +174,7 @@ cli
     })
 
     // Commande pour lister les questions de l'examen
-    .command('list-exam', 'Lister toutes les questions de l\'examen en cours')
+    .command('list-exam', 'Lister toutes les questions de l\'examen en cours de création')
     .action(({ logger }) => {
         try {
             const questionList = collectionExamen.listerQuestionsTemp();
@@ -188,7 +188,8 @@ cli
         }
     })
 
-	.command('recherche', 'cherche une question selon un critere dans les données')
+    // Commande pour la recherche d'une question
+	.command('recherche', 'Cherche une question selon un critère dans les données')
 	.argument('<id>', 'identifiant de la question')
     .argument('<type>', 'type de question')
     .argument('<titre>', 'mot présent dans le titre de la question')
