@@ -113,10 +113,15 @@ cli
 
     // Commande pour retirer une question
     .command('remove-question', 'Retirer une question de l\'examen en cours')
-    .argument('<idQuestion>', 'ID de la question à retirer')
+    .argument('<titreQuestion>', 'Titre de la question à retirer')
     .action(({ args, logger }) => {
         try {
-            collectionExamen.retirerQuestion(args.idQuestion);
+            const questionRetiree = collectionExamen.retirerQuestionTemp(args.titreQuestion);
+            if (questionRetiree) {
+                logger.info(`Question avec le titre "${args.titreQuestion}" retirée avec succès.`);
+            } else {
+                logger.error(`Aucune question trouvée avec le titre "${args.titreQuestion}".`);
+            }
         } catch (error) {
             logger.error(`Erreur lors de la suppression de la question : ${error.message}`);
         }
