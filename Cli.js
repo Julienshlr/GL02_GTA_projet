@@ -185,8 +185,8 @@ cli
             logger.error(`Erreur lors de l\'affichage des questions : ${error.message}`);
         }
 
-    });
-cli
+    })
+
 	.command('recherche', 'cherche une question selon un critere dans les données')
 	.option('--type <type>', 'type de question', { default: "default" })
     .option('--titre <titre>', 'mot présent dans le titre de la question', { default: "default" })
