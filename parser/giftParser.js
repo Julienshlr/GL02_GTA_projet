@@ -82,7 +82,7 @@ GiftParser.prototype.parse = function(data){
 
 GiftParser.prototype.errMsg = function(msg, input){
     this.errorCount++;
-    console.log("Parsing Error ! on "+input+" -- msg : "+msg);
+    //console.log("Parsing Error ! on "+input+" -- msg : "+msg);
 }
 
 // Donne le premier élément de l'input

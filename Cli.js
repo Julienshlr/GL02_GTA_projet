@@ -14,7 +14,7 @@ function parseData(filePath) {
 		  analyzer.parse(data);
 
 		  if (analyzer.errorCount != 0) {
-			console.log("The .gift file contains errors.");
+			//console.log("The .gift file contains errors.");
 		  }
 			//console.log(analyzer.parsedQuestion);
 		  return analyzer.parsedQuestion;
