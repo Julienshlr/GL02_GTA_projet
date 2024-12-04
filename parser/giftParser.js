@@ -217,8 +217,8 @@ GiftParser.prototype.text = function(input){
 
 GiftParser.prototype.deleteFeedback = function(input){ //suppression des commentaires des questions pour facilité de manipulation
 	if(this.check('#', input)){
-		while(!this.check('=',input) && !this.check('~',input) && !this.check('}',input)){
-			input=this.reduce(inpute);
+		while(!this.check('=',this.reduce(input)) && !this.check('~',this.reduce(input)) && !this.check('}',this.reduce(input))){
+			input=this.reduce(input);
 		}
 	}
 	return input;
@@ -233,6 +233,7 @@ GiftParser.prototype.answers = function(input){
 
     // question ouverte
     if (this.check('}', input)){
+		input=this.deleteFeedback(input);
         input = this.reduce(input);
         Question.nbOpenQuestion++;
         return { tq: "open_question", ca: [], choices: [], in: input};
@@ -260,6 +261,7 @@ GiftParser.prototype.answers = function(input){
 					input = this.reduce(input);
 				}
 				while (!this.check('=', input) && !this.check('}', input)){
+					input=this.deleteFeedback(input);
 					numeric_answer_tab.push(this.next(input));
 					input = this.reduce(input);
 					if (this.check(':', input)){
@@ -294,6 +296,7 @@ GiftParser.prototype.answers = function(input){
             correct_answers.push('F');
         }
         input = this.reduce(input);
+		input=this.deleteFeedback(input);
         input = this.reduce(input);
         Question.nbTrueFalse++;
         return {tq: "true_false", ca: correct_answers, choices: choices, in: input};
@@ -302,20 +305,18 @@ GiftParser.prototype.answers = function(input){
 		for (let i = 0; i < 4; i++){
 			input = this.reduce(input);
 		}
-		while (!this.check('}', input)){
-			input = this.reduce(input);
-		}
+		input=this.deleteFeedback(input);
 		correct_answers.push('TRUE');
+		input = this.reduce(input);
 		return {tq: "true_false", ca: correct_answers, choices: choices, in: input};
 	}
 	if (input.startsWith('FALSE')){
-		for (let i = 0; i < 4; i++){
+		for (let i = 0; i < 5; i++){
 			input = this.reduce(input);
 		}
-		while (!this.check('}', input)){
-			input = this.reduce(input);
-		}
+		input=this.deleteFeedback(input);
 		correct_answers.push('FALSE');
+		input = this.reduce(input);
 		return {tq: "true_false", ca: correct_answers, choices: choices, in: input};
 	}
 
@@ -336,10 +337,11 @@ GiftParser.prototype.answers = function(input){
 			}else{
 				input = this.reduce(input);
 			}
-            if (!this.check('%', input)){
+            if (this.check('%', input)){
                 type_question = "short_answer_partial_credit"; // crédit partiel avec pourcentage sans choix(commentaire et pourcentage inclus dans réponse)
 			}
             while (!this.check('=', input) && !this.check('~', input) && !this.check('}', input)){
+				input=this.deleteFeedback(input);
                 answer_tab.push(this.next(input));
                 input = this.reduce(input);
                 if(this.check(':', input)){
@@ -355,10 +357,11 @@ GiftParser.prototype.answers = function(input){
 				
             } else if (this.check('~', input)){
                 input = this.reduce(input);
-				if (!this.check('%', input)){
+				if (this.check('%', input)){
 					type_question = "multiple_choice_partial_credit"; // crédit partiel avec pourcentage à choix multiple(commentaire et pourcentage inclus dans réponse)
 			    }
                 while (!this.check('=', input) && !this.check('~', input) && !this.check('}', input)){
+					input=this.deleteFeedback(input);
                     answer_tab.push(this.next(input));
                     input = this.reduce(input);
 					if(this.check(':', input)){
