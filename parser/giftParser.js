@@ -246,6 +246,8 @@ GiftParser.prototype.answers = function(input){
     // plages numériques, réponse : tolérance et inf .. sup sont stockés tels quels dans l'objet 
 	//prendres plusieurs options en compte
     if (this.check('#', input)){
+		let numeric_answer_tab = [];
+		let numeric_answer = '';
         input = this.reduce(input);
             while (input[0] == ' ' || input[0] == '\n' || input[0] == '\r'){
 				input = this.reduce(input);
@@ -255,8 +257,7 @@ GiftParser.prototype.answers = function(input){
 				type_question = "numeric_partial_credit";
 		    }
             while (!this.check('}', input)){
-				let numeric_answer_tab = [];
-				let numeric_answer = '';
+				
 				if (this.check('=', input)){
 					input = this.reduce(input);
 				}
