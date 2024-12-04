@@ -1,4 +1,4 @@
-let Question = require('../Question.js');
+let Question = require('../composants/Question.js');
 
 // giftParser
 

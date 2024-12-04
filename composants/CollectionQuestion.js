@@ -3,7 +3,7 @@ const path = require('path');
 
 // Classe permettant la création d'une collection de questions
 var CollectionQuestions = function() {
-    this.tempFolder = path.join(__dirname, 'temp');
+    this.tempFolder = path.join(__dirname, '../temp');
     if (!fs.existsSync(this.tempFolder)) {
         fs.mkdirSync(this.tempFolder);
     }
