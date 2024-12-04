@@ -133,31 +133,41 @@ cli
     .argument('<nomFichier>', 'Nom du fichier de destination (sans extension)')
     .action(({ args, logger }) => {
         try {
-            // Vérifier les contraintes de l'examen
-            if (collectionExamen.questions.length < 15) {
-                logger.error('Un examen doit contenir au moins 15 questions.');
+            // Définir le chemin du fichier temporaire
+            const tempPath = path.join(__dirname, 'temp', 'temp_questions.gift');
+
+            // Vérifier si le fichier temporaire existe
+            if (!fs.existsSync(tempPath)) {
+                logger.error('Aucun examen en cours de création.');
                 return;
             }
 
-            // Construire le contenu au format GIFT
-            const contenuGift = collectionExamen.questions.map(q => {
-                return `::${q.titre}:: ${q.enonce} { ${q.options.map(o => (q.reponsesCorrectes.includes(o) ? '=' : '~') + o).join(' ')} }`;
-            }).join('\n\n');
+            // Lire le contenu du fichier temporaire
+            const contenuTemp = fs.readFileSync(tempPath, 'utf-8');
 
-            // Créer le dossier si nécessaire
-            const dossier = path.join(__dirname, args.nomDossier);
+            // Vérifier si le nombre de questions est inférieur à 15
+            const questionsExistantes = contenuTemp.split('\n').filter(line => line.startsWith('::')).length;
+            if (questionsExistantes < 15) {
+                logger.error('Un examen doit contenir au moins 15 questions. Il en contient actuellement : ' + questionsExistantes);
+                return;
+            }
+
+            // Créer le dossier de destination s'il n'existe pas
+            const dossier = path.join(__dirname, "examens/" + `${args.nomDossier}`);
             if (!fs.existsSync(dossier)) {
                 fs.mkdirSync(dossier, { recursive: true });
             }
 
-            // Sauvegarder le fichier
+            // Définir le chemin du fichier d'exportation
             const cheminFichier = path.join(dossier, `${args.nomFichier}.gift`);
-            fs.writeFileSync(cheminFichier, contenuGift, 'utf-8');
+
+            // Sauvegarder le fichier temporaire sous le nom spécifié
+            fs.writeFileSync(cheminFichier, contenuTemp, 'utf-8');
             logger.info(`Examen exporté avec succès : ${cheminFichier}`);
 
-            // Réinitialiser la collection pour permettre un nouvel examen
-            collectionExamen.questions = [];
-            logger.info('La collection d\'examen a été réinitialisée. Vous pouvez commencer un nouvel examen.');
+            // Supprimer le fichier temporaire après l'export
+            fs.unlinkSync(tempPath);
+
         } catch (error) {
             logger.error(`Erreur lors de l'exportation de l'examen : ${error.message}`);
         }
