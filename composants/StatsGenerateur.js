@@ -1,5 +1,6 @@
 // Import des bibliothèques nécessaires
 const fs = require("fs");
+const path = require('path');
 const VegaLite = require("vega-lite");
 const GiftParser = require("../parser/giftParser");
 
@@ -8,7 +9,7 @@ const GiftParser = require("../parser/giftParser");
  * @param {string[]} filePaths - liste des chemins vers les fichiers GIFT
  */
 const examFiles = [
-  "../examens/test.gift",
+  path.join(__dirname, '..', 'examens', 'test.gift'),
 ];
 
 function generateExamProfile(filePaths) {
