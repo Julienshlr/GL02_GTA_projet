@@ -1,7 +1,6 @@
 // Classe permettant la création d'une question
 
-var Question = function(id, titre, type, enonce, options, reponsesCorrectes) {
-    this.id = id;
+var Question = function(titre, type, enonce, options, reponsesCorrectes) {
     this.titre = titre;
     this.type = type;
     this.enonce = enonce;
