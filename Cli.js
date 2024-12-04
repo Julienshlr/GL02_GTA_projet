@@ -2,8 +2,10 @@ const cli = require('@caporal/core').default;
 const fs = require('fs');
 const path = require('path');
 const GiftParser = require('./parser/giftParser.js');
-const CollectionQuestions = require('./CollectionQuestion.js');
-const VCardGenerateur = require('./VCardGenerateur.js');
+const CollectionQuestion = require('./composants/CollectionQuestion.js');
+const VCardGenerateur = require('./composants/VCardGenerateur.js');
+
+const collectionExamen = new CollectionQuestion();
 
 
 function parseData(filePath) {
@@ -17,8 +19,6 @@ function parseData(filePath) {
 			//console.log(analyzer.parsedQuestion);
 		  return analyzer.parsedQuestion;
 }
-
-const collectionExamen = new CollectionQuestions();
 
 
 cli
@@ -53,103 +53,138 @@ cli
     })
 
 
-
-
     // Commande pour ajouter une question
-    .command('add-question', 'Ajouter une question à l\'examen en cours')
+    .command('add-question', 'Ajouter une question à l\'examen en cours de création')
     .argument('<fichier>', 'Nom du fichier dans SujetB_data (sans extension)')
-    .argument('<idQuestion>', 'ID de la question à ajouter')
+    .argument('<titreQuestion>', 'Titre de la question à ajouter')
     .action(({ args, logger }) => {
         try {
-            // Charger le fichier
+            // Vérifier si le fichier temporaire contient déjà 20 questions
+            const tempPath = path.join(__dirname, 'temp', 'temp_questions.gift');
+            const contenuTemp = fs.existsSync(tempPath) ? fs.readFileSync(tempPath, 'utf-8') : '';
+            const questionsExistantes = contenuTemp.split('\n').filter(line => line.startsWith('::')).length;
+    
+            if (questionsExistantes >= 20) {
+                logger.error('Vous ne pouvez pas ajouter plus de 20 questions à l\'examen.');
+                return;
+            }
+    
+            // Charger le fichier source
             const cheminFichier = path.join(__dirname, 'SujetB_data', `${args.fichier}.gift`);
             if (!fs.existsSync(cheminFichier)) {
                 logger.error(`Le fichier ${args.fichier}.gift est introuvable.`);
                 return;
             }
-
+    
             const contenu = fs.readFileSync(cheminFichier, 'utf-8');
-            logger.info("Contenu du fichier chargé :\n" + contenu);
-
-            // Parse les questions
-            const parser = new GiftParser(false, false);
-            parser.parse(contenu);
-
-            console.log("Questions disponibles :", parser.parsedQuestion.map(q => q.titre));
-
-            // Rechercher la question par ID
-            const question = parser.parsedQuestion.find(q => q.titre === args.idQuestion);
-            if (!question) {
-                logger.error(`La question avec l'ID "${args.idQuestion}" est introuvable dans ${args.fichier}.gift.`);
+            const regexQuestion = new RegExp(`::${args.titreQuestion}::.*?(?=\\n::|\\n$|$)`, 's');
+            const questionTrouvee = contenu.match(regexQuestion);
+    
+            if (!questionTrouvee) {
+                logger.error(`La question avec le titre "${args.titreQuestion}" est introuvable dans ${args.fichier}.gift.`);
                 return;
             }
 
-            // Ajouter la question à la collection d'examen
-            if (collectionExamen.questions.length >= 20) {
-                logger.warn('Vous ne pouvez pas ajouter plus de 20 questions à l\'examen.');
+            if (contenuTemp.includes(args.titreQuestion)) {
+                logger.error(`La question "${args.titreQuestion}" existe déjà dans l'examen en cours de création.`);
                 return;
             }
-            collectionExamen.ajouterQuestion(question);
+    
+            // Ajouter la question au fichier temporaire après nettoyage
+            let nouvelleQuestion = questionTrouvee[0].trim();
+    
+            // Supprimer les lignes qui commencent par '//'
+            nouvelleQuestion = nouvelleQuestion
+                .split('\n')                     // Découpe la question en lignes
+                .filter(line => !line.trim().startsWith('//')) // Exclut les lignes commençant par //
+                .join('\n');                    // Reconstruit la question sans ces lignes
+    
+            const ajoutReussi = collectionExamen.ajouterQuestionTemp(nouvelleQuestion);
+    
+            if (ajoutReussi) {
+                logger.info(`Question "${args.titreQuestion}" ajoutée avec succès à l'examen en cours de création.`);
+            }
         } catch (error) {
             logger.error(`Erreur lors de l'ajout de la question : ${error.message}`);
         }
     })
 
     // Commande pour retirer une question
-    .command('remove-question', 'Retirer une question de l\'examen en cours')
-    .argument('<idQuestion>', 'ID de la question à retirer')
+    .command('remove-question', 'Retirer une question de l\'examen en cours de création')
+    .argument('<titreQuestion>', 'Titre de la question à retirer')
     .action(({ args, logger }) => {
         try {
-            collectionExamen.retirerQuestion(args.idQuestion);
+            const questionRetiree = collectionExamen.retirerQuestionTemp(args.titreQuestion);
+            if (questionRetiree) {
+                logger.info(`Question avec le titre "${args.titreQuestion}" retirée avec succès.`);
+            } else {
+                logger.error(`Aucune question trouvée avec le titre "${args.titreQuestion}".`);
+            }
         } catch (error) {
             logger.error(`Erreur lors de la suppression de la question : ${error.message}`);
         }
     })
 
     // Commande pour exporter l'examen
-    .command('export-exam', 'Exporter l\'examen en cours au format .gift')
+    .command('export-exam', 'Exporter l\'examen en cours de création au format .gift')
     .argument('<nomDossier>', 'Nom du dossier de destination')
     .argument('<nomFichier>', 'Nom du fichier de destination (sans extension)')
     .action(({ args, logger }) => {
         try {
-            // Vérifier les contraintes de l'examen
-            if (collectionExamen.questions.length < 15) {
-                logger.error('Un examen doit contenir au moins 15 questions.');
+            // Définir le chemin du fichier temporaire
+            const tempPath = path.join(__dirname, 'temp', 'temp_questions.gift');
+
+            // Vérifier si le fichier temporaire existe
+            if (!fs.existsSync(tempPath)) {
+                logger.error('Aucun examen en cours de création.');
                 return;
             }
 
-            // Construire le contenu au format GIFT
-            const contenuGift = collectionExamen.questions.map(q => {
-                return `::${q.titre}:: ${q.enonce} { ${q.options.map(o => (q.reponsesCorrectes.includes(o) ? '=' : '~') + o).join(' ')} }`;
-            }).join('\n\n');
+            // Lire le contenu du fichier temporaire
+            const contenuTemp = fs.readFileSync(tempPath, 'utf-8');
 
-            // Créer le dossier si nécessaire
-            const dossier = path.join(__dirname, args.nomDossier);
+            // Vérifier si le nombre de questions est inférieur à 15
+            const questionsExistantes = contenuTemp.split('\n').filter(line => line.startsWith('::')).length;
+            if (questionsExistantes < 15) {
+                logger.error('Un examen doit contenir au moins 15 questions. Il en contient actuellement : ' + questionsExistantes);
+                return;
+            }
+
+            // Créer le dossier de destination s'il n'existe pas
+            const dossier = path.join(__dirname, "examens/" + `${args.nomDossier}`);
             if (!fs.existsSync(dossier)) {
                 fs.mkdirSync(dossier, { recursive: true });
             }
 
-            // Sauvegarder le fichier
+            // Définir le chemin du fichier d'exportation
             const cheminFichier = path.join(dossier, `${args.nomFichier}.gift`);
-            fs.writeFileSync(cheminFichier, contenuGift, 'utf-8');
+
+            // Sauvegarder le fichier temporaire sous le nom spécifié
+            fs.writeFileSync(cheminFichier, contenuTemp, 'utf-8');
             logger.info(`Examen exporté avec succès : ${cheminFichier}`);
 
-            // Réinitialiser la collection pour permettre un nouvel examen
-            collectionExamen.questions = [];
-            logger.info('La collection d\'examen a été réinitialisée. Vous pouvez commencer un nouvel examen.');
+            // Supprimer le fichier temporaire après l'export
+            fs.unlinkSync(tempPath);
+
         } catch (error) {
             logger.error(`Erreur lors de l'exportation de l'examen : ${error.message}`);
         }
     })
 
     // Commande pour lister les questions de l'examen
-    .command('list-exam', 'Lister toutes les questions de l\'examen en cours')
+    .command('list-exam', 'Lister toutes les questions de l\'examen en cours de création')
     .action(({ logger }) => {
         try {
-            collectionExamen.listerQuestions();
+            const questionList = collectionExamen.listerQuestionsTemp();
+            if (!questionList){
+                logger.error('Aucune question dans la liste d\'examen en cours de création.');
+                return;
+            }
+            logger.info('Liste des questions de l\'examen :\n' + questionList);
         } catch (error) {
             logger.error(`Erreur lors de l\'affichage des questions : ${error.message}`);
         }
+
     });
 cli
 	.command('recherche', 'cherche une question selon un critere dans les données')
@@ -214,7 +249,7 @@ cli
 					}
 				}
         } catch (error) {
-            logger.error(error.message);
+            logger.error('parsage des fichiers impossible');
         }
     });
 

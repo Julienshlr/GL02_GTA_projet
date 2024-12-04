@@ -54,7 +54,7 @@ END:VCARD
 // Méthode pour sauvegarder une VCard
 VCardGenerateur.prototype.sauvegarderFichier = function(data, nomFichier) {
     const contenu = this.genererVCard(data);
-    const dossier = path.join(__dirname, 'VCardGeneree');
+    const dossier = path.join(__dirname, '../VCardGeneree');
 
     if (!fs.existsSync(dossier)) {
         fs.mkdirSync(dossier);
@@ -62,7 +62,6 @@ VCardGenerateur.prototype.sauvegarderFichier = function(data, nomFichier) {
 
     const cheminFichier = path.join(dossier, `${nomFichier}.vcf`);
     fs.writeFileSync(cheminFichier, contenu);
-    console.log(`VCard sauvegardée dans le fichier : ${cheminFichier}`);
 };
 
 module.exports = VCardGenerateur;
