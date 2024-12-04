@@ -5,6 +5,8 @@ const GiftParser = require('./parser/giftParser.js');
 const CollectionQuestions = require('./CollectionQuestion.js');
 const VCardGenerateur = require('./VCardGenerateur.js');
 
+const collectionExamen = new CollectionQuestion();
+
 
 function parseData(filePath) {
   const data = fs.readFileSync(filePath, 'utf8');  
@@ -19,8 +21,6 @@ function parseData(filePath) {
 		  
 
 }
-
-const collectionExamen = new CollectionQuestions();
 
 
 cli
@@ -55,43 +55,57 @@ cli
     })
 
 
-
-
     // Commande pour ajouter une question
-    .command('add-question', 'Ajouter une question à l\'examen en cours')
+    .command('add-question', 'Ajouter une question à l\'examen temporaire')
     .argument('<fichier>', 'Nom du fichier dans SujetB_data (sans extension)')
-    .argument('<idQuestion>', 'ID de la question à ajouter')
+    .argument('<titreQuestion>', 'Titre de la question à ajouter')
     .action(({ args, logger }) => {
         try {
-            // Charger le fichier
+            // Vérifier si le fichier temporaire contient déjà 20 questions
+            const tempPath = path.join(__dirname, 'temp', 'temp_questions.gift');
+            const contenuTemp = fs.existsSync(tempPath) ? fs.readFileSync(tempPath, 'utf-8') : '';
+            const questionsExistantes = contenuTemp.split('\n').filter(line => line.startsWith('::')).length;
+    
+            if (questionsExistantes >= 20) {
+                logger.error('Vous ne pouvez pas ajouter plus de 20 questions à l\'examen temporaire.');
+                return;
+            }
+    
+            // Charger le fichier source
             const cheminFichier = path.join(__dirname, 'SujetB_data', `${args.fichier}.gift`);
             if (!fs.existsSync(cheminFichier)) {
                 logger.error(`Le fichier ${args.fichier}.gift est introuvable.`);
                 return;
             }
-
+    
             const contenu = fs.readFileSync(cheminFichier, 'utf-8');
-            logger.info("Contenu du fichier chargé :\n" + contenu);
-
-            // Parse les questions
-            const parser = new GiftParser(false, false);
-            parser.parse(contenu);
-
-            console.log("Questions disponibles :", parser.parsedQuestion.map(q => q.titre));
-
-            // Rechercher la question par ID
-            const question = parser.parsedQuestion.find(q => q.titre === args.idQuestion);
-            if (!question) {
-                logger.error(`La question avec l'ID "${args.idQuestion}" est introuvable dans ${args.fichier}.gift.`);
+            const regexQuestion = new RegExp(`::${args.titreQuestion}::.*?(?=\\n::|\\n$|$)`, 's');
+            const questionTrouvee = contenu.match(regexQuestion);
+    
+            if (!questionTrouvee) {
+                logger.error(`La question avec le titre "${args.titreQuestion}" est introuvable dans ${args.fichier}.gift.`);
                 return;
             }
 
-            // Ajouter la question à la collection d'examen
-            if (collectionExamen.questions.length >= 20) {
-                logger.warn('Vous ne pouvez pas ajouter plus de 20 questions à l\'examen.');
+            if (contenuTemp.includes(args.titreQuestion)) {
+                logger.error(`La question "${args.titreQuestion}" existe déjà dans l'examen en cours de création.`);
                 return;
             }
-            collectionExamen.ajouterQuestion(question);
+    
+            // Ajouter la question au fichier temporaire après nettoyage
+            let nouvelleQuestion = questionTrouvee[0].trim();
+    
+            // Supprimer les lignes qui commencent par '//'
+            nouvelleQuestion = nouvelleQuestion
+                .split('\n')                     // Découpe la question en lignes
+                .filter(line => !line.trim().startsWith('//')) // Exclut les lignes commençant par //
+                .join('\n');                    // Reconstruit la question sans ces lignes
+    
+            const ajoutReussi = collectionExamen.ajouterQuestionTemp(nouvelleQuestion);
+    
+            if (ajoutReussi) {
+                logger.info(`Question "${args.titreQuestion}" ajoutée avec succès à l'examen en cours de création.`);
+            }
         } catch (error) {
             logger.error(`Erreur lors de l'ajout de la question : ${error.message}`);
         }
@@ -152,8 +166,8 @@ cli
         } catch (error) {
             logger.error(`Erreur lors de l\'affichage des questions : ${error.message}`);
         }
-    });
-cli
+    })
+
 	.command('recherche', 'cherche une question selon un critere dans les données')
 	.argument('<id>', 'identifiant de la question')
     .argument('<type>', 'type de question')
