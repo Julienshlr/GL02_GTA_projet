@@ -177,7 +177,12 @@ cli
     .command('list-exam', 'Lister toutes les questions de l\'examen en cours')
     .action(({ logger }) => {
         try {
-            collectionExamen.listerQuestions();
+            const questionList = collectionExamen.listerQuestionsTemp();
+            if (!questionList){
+                logger.error('Aucune question dans la liste d\'examen en cours de création.');
+                return;
+            }
+            logger.info('Liste des questions de l\'examen :\n' + questionList);
         } catch (error) {
             logger.error(`Erreur lors de l\'affichage des questions : ${error.message}`);
         }
