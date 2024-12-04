@@ -62,7 +62,6 @@ VCardGenerateur.prototype.sauvegarderFichier = function(data, nomFichier) {
 
     const cheminFichier = path.join(dossier, `${nomFichier}.vcf`);
     fs.writeFileSync(cheminFichier, contenu);
-    console.log(`VCard sauvegardée dans le fichier : ${cheminFichier}`);
 };
 
 module.exports = VCardGenerateur;
