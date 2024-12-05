@@ -4,8 +4,11 @@ const path = require('path');
 const GiftParser = require('./parser/giftParser.js');
 const CollectionQuestion = require('./composants/CollectionQuestion.js');
 const VCardGenerateur = require('./composants/VCardGenerateur.js');
+const StatsGenerateur = require('./composants/StatsGenerateur.js');
+
 
 const collectionExamen = new CollectionQuestion();
+const chartStats = new StatsGenerateur();
 
 
 function parseData(filePath) {
@@ -258,7 +261,57 @@ cli
         } catch (error) {
             logger.error('parsage des fichiers impossible');
         }
+    })
+
+
+    // Commande pour générer un histogramme des types de questions
+    .command("generate-histogram", "Générer un histogramme des types de questions")
+    .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
+    .action(({ args, logger }) => {
+        const filePath = path.resolve(args.file); // Résolution du chemin du fichier
+
+        // Lire le fichier GIFT
+        fs.readFile(filePath, "utf8", (err, content) => {
+            if (err) {
+                return logger.error(`Erreur de lecture du fichier : ${err.message}`);
+            }
+
+            try {
+                // Analyser le fichier GIFT
+                const parser = new GiftParser(false, false);
+                parser.parse(content);
+
+                const questionTypesCount = {};
+
+                // Compter les types de questions
+                parser.parsedQuestion.forEach((question) => {
+                    const type = question.type;
+                    if (type) {
+                        questionTypesCount[type] = (questionTypesCount[type] || 0) + 1;
+                    }
+                });
+
+                // Si des types de questions sont trouvés, générer l'histogramme
+                if (Object.keys(questionTypesCount).length > 0) {
+                    // Créer le dossier "graphiques" s'il n'existe pas
+                    const directoryPath = path.join(__dirname, 'graphiques');
+                    if (!fs.existsSync(directoryPath)) {
+                        fs.mkdirSync(directoryPath, { recursive: true });
+                    }
+
+                    // Générer le fichier de l'histogramme
+                    const outputFileName = path.join(directoryPath, `histogram_${Date.now()}.svg`);
+                    chartStats.createHistogram(questionTypesCount, outputFileName, logger);
+                    logger.info(`Histogramme généré avec succès : ${outputFileName}`);
+                } else {
+                    logger.error("Aucune question valide détectée.");
+                }
+            } catch (parseErr) {
+                logger.error(`Erreur lors du parsing du fichier : ${parseErr.message}`);
+            }
+        });
     });
+
 
 
 
