@@ -29,8 +29,8 @@ L'outil livré suit les différentes spécifications présentes dans le cahier d
 
 Quelques initiatives ont été prise afin d'assurer le bon fonctionnement de l'application.
 
-Tout d'abord concernant le parseur, comme mentionné dans la section ABNF, des types de question manquaient dans le cahier des charges par rapport à la base de données. Nous avons donc dû ajouter des types de question en plus de ceux fournis dans le cahier des charges pour que le parseur puisse fonctionner sans problème.
-Une commande permettant de lister les questions d'un examen en cours de création a été ajoutée pour simplifier la visualtion.
+Tout d'abord concernant le parseur, comme mentionné dans la section ABNF, des types de question manquaient dans le cahier des charges par rapport à la base de données. Nous avons donc dû ajouter des types de question en plus de ceux fournis dans le cahier des charges pour que le parseur puisse fonctionner sans problème.  
+Une commande permettant de lister les questions d'un examen en cours de création a été ajoutée pour simplifier la visualtion.  
 Pour finir, la vérification des contraintes liées à la création d'un examen se fait directement via l'ajout de questions et l'exportation de l'examen afin d'éviter la surcharge de commandes inutiles.
 
 ## Installation
@@ -87,7 +87,7 @@ node Cli.js vcard <prenom> <nom> <telephone> <email> --adresse <adresse> --outpu
 > [!NOTE]
 > Pour plus d'informations notamment concernant les formats des différents champs, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 ### 
-2. Rechercher une question selon un critère dans les données
+2. Rechercher une question selon un critère dans les données  
 Rechercher le type et le titre de chaque question de la base de données
 ```bash
 node Cli.js recherche
