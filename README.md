@@ -8,9 +8,9 @@ L'objectif de ce projet est selon le cahier des charges "de fournir aux enseigna
 
 L'outil livré suit les différentes spécifications présentes dans le cahier des charges afin de satisfaire ce besoin.
 
-### Commentaires sur le cahier des charges
+## Commentaires sur le cahier des charges
 
-#### Spécifications couvertes
+### Spécifications couvertes :
 
 - [x] SPEC1
 - [x] SPEC2
@@ -21,11 +21,11 @@ L'outil livré suit les différentes spécifications présentes dans le cahier d
 - [x] SPEC7
 - [x] SPEC8
 
-#### ABNF
+### ABNF :
 
 
 
-#### Initiatives prises
+### Initiatives prises :
 
 Quelques initiatives ont été prise afin d'assurer le bon fonctionnement de l'application.
 
@@ -40,6 +40,7 @@ Placez vous dans le répertoire du projet avec la commande :
 ```bash
 cd
 ```
+
 
 Installez les modules requis avec la commande :
 
@@ -56,6 +57,7 @@ npm install
 pwd
 ```
 
+
 ### Commandes de l'application
 
 > [!TIP]
@@ -64,20 +66,24 @@ pwd
 node Cli.js --help
 ```
 
+
 > [!TIP]
 > Obtenir de l'aide sur une commande précise
 ```bash
 node Cli.js <commande> --help
 ```
 
+
+
 #### Liste des commandes principales
 
-1 -  Générer un fichier VCard
+    1 -  Générer un fichier VCard
 
 Sans options
 ```bash
 node Cli.js vcard <prenom> <nom> <telephone> <email>
 ```
+
 
 Avec options
 ```bash
@@ -87,12 +93,14 @@ node Cli.js vcard <prenom> <nom> <telephone> <email> --adresse <adresse> --outpu
 > [!NOTE]
 > Pour plus d'informations notamment concernant les formats des différents champs, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
-2 - Rechercher une question selon un critère dans les données
+
+    2 - Rechercher une question selon un critère dans les données
 
 Rechercher le type et le titre de chaque question de la base de données
 ```bash
 node Cli.js recherche
 ```
+
 
 Rechercher le type et le titre d'une question en fonction d'un critère dans la base de données
 ```bash
@@ -102,7 +110,8 @@ node Cli.js recherche --motcle <mots clés> --titre <titre> --type <type>
 > [!NOTE]
 > Pour plus d'informations notamment concernant les types possibles, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
-3 - Ajouter une question à l'examen en cours de création
+
+    3 - Ajouter une question à l'examen en cours de création
 
 ```bash
 node Cli.js add-question <nomFichier> <titre>
@@ -111,7 +120,8 @@ node Cli.js add-question <nomFichier> <titre>
 > [!NOTE]
 > Pour plus d'informations notamment concernant le nom du fichier, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
-4 - Retirer une question de l'examen en cours de création
+
+    4 - Retirer une question de l'examen en cours de création
 
 ```bash
 node Cli.js remove-question <titre>
@@ -120,7 +130,8 @@ node Cli.js remove-question <titre>
 > [!NOTE]
 > Pour plus d'informations, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
-5 - Lister les questions de l'examen en cours de création
+
+    5 - Lister les questions de l'examen en cours de création
 
 ```bash
 node Cli.js list-exam
@@ -129,7 +140,8 @@ node Cli.js list-exam
 > [!NOTE]
 > Pour plus d'informations, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
-6 - Exporter un examen en cours de création
+
+    6 - Exporter un examen en cours de création
 
 ```bash
 node Cli.js export-exam <nomDossier> <nomFichier>
@@ -138,7 +150,8 @@ node Cli.js export-exam <nomDossier> <nomFichier>
 > [!NOTE]
 > Pour plus d'informations notamment concernant le nom du fichier, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
-7 - Générer un histogramme des types de question d'un fichier
+
+    7 - Générer un histogramme des types de question d'un fichier
 
 ```bash
 node Cli.js generate-histogram <chemin du fichier>
@@ -147,21 +160,24 @@ node Cli.js generate-histogram <chemin du fichier>
 > [!NOTE]
 > Pour plus d'informations, référez-vous à la section "Obtenir de l'aide sur une commande précise".
 
+
+
 #### Version : **1.0.0**
+
 
 ## Contributeurs
 
 ### Équipe **GTA** (développement) :
 
-- Guillaume Guthier <guillaume.guthier@utt.fr>
-- Antoine Kuntz <antoine.kuntz@utt.fr>
-- Théo Bousmaha--Jouve <theo.bousmaha__jouve@utt.fr>
+- Guillaume Guthier : <guillaume.guthier@utt.fr>
+- Antoine Kuntz : <antoine.kuntz@utt.fr>
+- Théo Bousmaha--Jouve : <theo.bousmaha__jouve@utt.fr>
 
 ### Équipe **QuarkStudio** (commanditaire) :
 
-- Simon Gelbart <simon.gelbart@utt.fr>
-- Romain Goldenchtein <romain.goldenchtein@utt.fr>
-- Julien Schieler <julien.schieler@utt.fr>
+- Simon Gelbart : <simon.gelbart@utt.fr>
+- Romain Goldenchtein : <romain.goldenchtein@utt.fr>
+- Julien Schieler : <julien.schieler@utt.fr>
 
 ## Licence
 
