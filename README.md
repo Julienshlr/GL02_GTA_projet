@@ -64,101 +64,84 @@ pwd
 ```bash
 node Cli.js --help
 ```
-  
-  
+###
 > [!TIP]
 > Obtenir de l'aide sur une commande précise
 ```bash
 node Cli.js <commande> --help
 ```
-  
-
+###
 ### Commandes principales
-##
+###
 1.  Générer un fichier VCard
-
 Sans options
 ```bash
 node Cli.js vcard <prenom> <nom> <telephone> <email>
 ```
-  
-  
+###
 Avec options
 ```bash
 node Cli.js vcard <prenom> <nom> <telephone> <email> --adresse <adresse> --output <nomFichier> --uri <uri>
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations notamment concernant les formats des différents champs, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
-  
-  
+### 
 2. Rechercher une question selon un critère dans les données
-
 Rechercher le type et le titre de chaque question de la base de données
 ```bash
 node Cli.js recherche
 ```
-  
-  
+###
 Rechercher le type et le titre d'une question en fonction d'un critère dans la base de données
 ```bash
 node Cli.js recherche --motcle <mots clés> --titre <titre> --type <type>
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations notamment concernant les types possibles, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
-  
-  
+###
 3. Ajouter une question à l'examen en cours de création
-
 ```bash
 node Cli.js add-question <nomFichier> <titre>
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations notamment concernant le nom du fichier, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
-  
-  
+###
 4. Retirer une question de l'examen en cours de création
-
 ```bash
 node Cli.js remove-question <titre>
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
-  
-  
+###
 5. Lister les questions de l'examen en cours de création
-
 ```bash
 node Cli.js list-exam
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
-  
-  
+###
 6. Exporter un examen en cours de création
-
 ```bash
 node Cli.js export-exam <nomDossier> <nomFichier>
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations notamment concernant le nom du fichier, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
-  
-  
+###
 7. Générer un histogramme des types de question d'un fichier
-
 ```bash
 node Cli.js generate-histogram <chemin du fichier>
 ```
-
+###
 > [!NOTE]
 > Pour plus d'informations, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
   
-  
+
 #### Version : **1.0.0**
 
 
