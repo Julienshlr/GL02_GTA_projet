@@ -256,7 +256,8 @@ GiftParser.prototype.answers = function(input){
 				type_question = "numeric_partial_credit";
 		    }
             while (!this.check('}', input)){
-				
+				let numeric_answer_tab = [];
+				let numeric_answer = '';
 				if (this.check('=', input)){
 					input = this.reduce(input);
 				}
@@ -279,12 +280,13 @@ GiftParser.prototype.answers = function(input){
 						}
 					}
 				}
+				numeric_answer = numeric_answer_tab.join('');
+				numeric_answer = this.removeSpaces(numeric_answer);
+				correct_answers.push(numeric_answer);
+				
+            
             }
-            numeric_answer = numeric_answer_tab.join('');
-            numeric_answer = this.removeSpaces(numeric_answer);
-            correct_answers.push(numeric_answer);
-            input = this.reduce(input);
-            Question.nbNumeric++;
+       
             return {tq: type_question, ca: correct_answers, choices: choices, in: input};
     }
 
