@@ -273,7 +273,7 @@ cli
         // Lire le fichier GIFT
         fs.readFile(filePath, "utf8", (err, content) => {
             if (err) {
-                return logger.error(`Erreur de lecture du fichier : ${err.message}`);
+                return logger.error(`Erreur de lecture du fichier, ce fichier n'existe pas`);
             }
 
             try {
@@ -307,7 +307,7 @@ cli
                     logger.error("Aucune question valide détectée.");
                 }
             } catch (parseErr) {
-                logger.error(`Erreur lors du parsing du fichier : ${parseErr.message}`);
+                logger.error(`Erreur lors du parsing du fichier.`);
             }
         });
     });
