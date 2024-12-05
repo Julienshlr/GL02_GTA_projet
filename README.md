@@ -58,13 +58,16 @@ pwd
 ```
 
 
-### Commandes de l'application
+
+### Commandes utiles
 
 > [!TIP]
 > Obtenir la liste des commandes et leur utilité
 ```bash
 node Cli.js --help
 ```
+
+
 
 
 > [!TIP]
@@ -75,14 +78,16 @@ node Cli.js <commande> --help
 
 
 
-#### Liste des commandes principales
+### Commandes principales
 
-    1 -  Générer un fichier VCard
+- 1 -  Générer un fichier VCard
 
 Sans options
 ```bash
 node Cli.js vcard <prenom> <nom> <telephone> <email>
 ```
+
+
 
 
 Avec options
@@ -91,15 +96,19 @@ node Cli.js vcard <prenom> <nom> <telephone> <email> --adresse <adresse> --outpu
 ```
 
 > [!NOTE]
-> Pour plus d'informations notamment concernant les formats des différents champs, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations notamment concernant les formats des différents champs, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 
 
-    2 - Rechercher une question selon un critère dans les données
+
+
+- 2 - Rechercher une question selon un critère dans les données
 
 Rechercher le type et le titre de chaque question de la base de données
 ```bash
 node Cli.js recherche
 ```
+
+
 
 
 Rechercher le type et le titre d'une question en fonction d'un critère dans la base de données
@@ -108,57 +117,68 @@ node Cli.js recherche --motcle <mots clés> --titre <titre> --type <type>
 ```
 
 > [!NOTE]
-> Pour plus d'informations notamment concernant les types possibles, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations notamment concernant les types possibles, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 
 
-    3 - Ajouter une question à l'examen en cours de création
+
+
+- 3 - Ajouter une question à l'examen en cours de création
 
 ```bash
 node Cli.js add-question <nomFichier> <titre>
 ```
 
 > [!NOTE]
-> Pour plus d'informations notamment concernant le nom du fichier, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations notamment concernant le nom du fichier, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 
 
-    4 - Retirer une question de l'examen en cours de création
+
+
+- 4 - Retirer une question de l'examen en cours de création
 
 ```bash
 node Cli.js remove-question <titre>
 ```
 
 > [!NOTE]
-> Pour plus d'informations, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 
 
-    5 - Lister les questions de l'examen en cours de création
+
+
+- 5 - Lister les questions de l'examen en cours de création
 
 ```bash
 node Cli.js list-exam
 ```
 
 > [!NOTE]
-> Pour plus d'informations, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 
 
-    6 - Exporter un examen en cours de création
+
+
+- 6 - Exporter un examen en cours de création
 
 ```bash
 node Cli.js export-exam <nomDossier> <nomFichier>
 ```
 
 > [!NOTE]
-> Pour plus d'informations notamment concernant le nom du fichier, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations notamment concernant le nom du fichier, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 
 
-    7 - Générer un histogramme des types de question d'un fichier
+
+
+- 7 - Générer un histogramme des types de question d'un fichier
 
 ```bash
 node Cli.js generate-histogram <chemin du fichier>
 ```
 
 > [!NOTE]
-> Pour plus d'informations, référez-vous à la section "Obtenir de l'aide sur une commande précise".
+> Pour plus d'informations, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
+
 
 
 
