@@ -291,9 +291,9 @@ GiftParser.prototype.answers = function(input){
     // Vrai / Faux
     if (this.check2Char('T}', input) || this.check2Char('F}', input)){
         if (this.check('T', input)){
-            correct_answers.push('T');
+            correct_answers.push('TRUE');
         } else if (this.check('F', input)){
-            correct_answers.push('F');
+            correct_answers.push('FALSE');
         }
         input = this.reduce(input);
 		input=this.deleteFeedback(input);

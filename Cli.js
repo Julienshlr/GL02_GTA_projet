@@ -5,7 +5,7 @@ const GiftParser = require('./parser/giftParser.js');
 const CollectionQuestion = require('./composants/CollectionQuestion.js');
 const VCardGenerateur = require('./composants/VCardGenerateur.js');
 const StatsGenerateur = require('./composants/StatsGenerateur.js');
-
+const prompt = require('prompt-sync')({sigint: true});
 
 const collectionExamen = new CollectionQuestion();
 const chartStats = new StatsGenerateur();
@@ -329,13 +329,140 @@ cli
         });
     })
 	
-	.command("examen", "simuler un examen  à partir d'un fichier donné")
+	.command("sim-exam", "simuler un examen  à partir d'un fichier donné")
     .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
     .action(({ args, logger }) => {
 		try{
-			const filepath = path.resolve(args.file); // Résolution du chemin du fichier
-			let exam = parseData(filepath);
-			
+			let filePath = path.resolve(args.file); // Résolution du chemin du fichier
+			let exam = parseData(filePath);
+			let score=0
+			for(let i=0; i<exam.length; i++){
+				console.log(exam[i].enonce);
+				console.log(exam[i].reponsesCorrectes);
+				console.log(exam[i].options);
+				if (exam[i].type=='multiple_choice'){
+					console.log('\n Les choix possibles sont: \n'+exam[i].options);
+					const a = prompt('Votre réponse: ');
+					if(exam[i].reponsesCorrectes[0].includes(a)){
+						console.log('bonne réponse');
+						score++;
+					}else{
+						console.log('mauvaise réponse');
+					}
+					
+				}else if (exam[i].type=='short_answer'){
+					const a = prompt('Votre réponse: ');
+					if(exam[i].reponsesCorrectes[0].includes(a)){
+						console.log('bonne réponse');
+						score++;
+					}else{
+						console.log('mauvaise réponse');
+					}
+				}else if (exam[i].type=='true_false'){
+					const a = prompt('TRUE or FALSE(écrit de cette manière): ');
+					if(a==exam[i].reponsesCorrectes[0]){
+							console.log('bonne réponse');
+							score++;
+						}else{
+							console.log('mauvaise réponse');
+						}
+						
+				}else if (exam[i].type=='description'){	
+					console.log('\n');
+				}else if (exam[i].type=='open_question'){
+					const a = prompt('Votre réponse: ');
+					console.log('\n Ce type de question doit être corrigé manuellement. Le point vous est accordé');
+					score++;
+				}else if (exam[i].type=='short_answer_missing_word'){
+					
+					if(exam[i].reponsesCorrectes.length>1){
+						for(let j=0; j<exam[i].reponsesCorrectes.length; j++){
+							const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade n°'+j+' ? : ');
+							if(exam[i].reponsesCorrectes[j].includes(a)){
+								console.log('bonne réponse');
+								score++;
+							}else{
+								if(j==exam[i].reponsesCorrectes.length-1){
+									console.log('mauvaise réponse');
+								}
+							}
+						}	
+					}else{
+						const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade ? : ');
+						if(exam[i].reponsesCorrectes[0].includes(a)){
+							console.log('bonne réponse');
+							score++;
+						}else{
+							console.log('mauvaise réponse');
+						}
+					}
+				}else if (exam[i].type=='multiple_choices_missing_word'){
+					
+					if(exam[i].reponsesCorrectes.length>1){
+						for(let j=0; j<exam[i].reponsesCorrectes.length; j++){
+							console.log('\n Les choix possibles sont: \n'+exam[i].options[j]);
+							const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade n°'+j+' ? : ');
+							if(exam[i].reponsesCorrectes[j].includes(a)){
+								console.log('bonne réponse');
+								score++;
+							}else{
+								if(j==exam[i].reponsesCorrectes.length-1){
+									console.log('mauvaise réponse');
+								}
+							}
+						}	
+					}else{
+						console.log('\n Les choix possibles sont: \n'+exam[i].options);
+						const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade ? : ');
+						if(exam[i].reponsesCorrectes[0].includes(a)){
+							console.log('bonne réponse');
+							score++;
+						}else{
+							console.log('mauvaise réponse');
+						}
+					}
+				}else if (exam[i].type=='numeric_margin'){
+					let tolerance=0;
+					for(let j=0; j<exam[i].reponsesCorrectes[0].length; j++){
+						if(exam[i].reponsesCorrectes[0][j]==':'){
+							tolerance=exam[i].reponsesCorrectes[0][j+1];
+							break;
+						}
+					}
+					const a = prompt('Entrez un nombre, la marge d erreur qui vous est accordée est de'+tolerance+': ');
+					if(exam[i].reponsesCorrectes[0]==a+':'+tolerance){
+						console.log('bonne réponse');
+						score++;
+					}else{
+						console.log('mauvaise réponse');
+					}
+					
+				}else if (exam[i].type=='numeric_intervals'){
+					let inf='';
+					let sup='';
+					let j=0;
+					while(exam[i].reponsesCorrectes[0][j]=='.' && exam[i].reponsesCorrectes[0][j+1]=='.'){
+						inf.push(exam[i].reponsesCorrectes[0][j]);
+					}
+					j=j+2;
+					while(j<exam[i].reponsesCorrectes[0].length){
+						sup.push(exam[i].reponsesCorrectes[0][j]);
+					}
+					inf=inf.join('');
+					inf=Number(inf);
+					sup=sup.join('');
+					sup=Number(sup);
+					const a = prompt('Entrez un nombre, une certaine marge d erreur vous est autorisée');
+					if(Number(exam[i].reponsesCorrectes[0])<sup && Number(exam[i].reponsesCorrectes[0])>inf){
+						console.log('bonne réponse');
+						score++;
+					}else{
+						console.log('mauvaise réponse');
+					}
+					
+				}
+					
+			}
 		}catch{
 			console.log("Fichier introuvable");
 		}
