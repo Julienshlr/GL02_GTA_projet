@@ -196,81 +196,86 @@ cli
 	.option('--motcle <motcle>', 'mots présents dans le texte', { default: "default" })
 	    .action(({ args, options, logger }) => {
         try {
-				let listData = fs.readdirSync('SujetB_data');
-				let listQ=[];
-				let filepath;
-				let questionTrouvee=false;
-				for(let i=0; i<listData.length; i++){
-					filepath='SujetB_data/'+String(listData[i]);
-					listQ= listQ.concat(parseData(filepath));
-				}
-				if(options.type!="default" && options.titre!="default" && options.motcle!="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle) && listQ[i].type==options.type){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
+				if(options.type=='default' || options.type=='short_answer' || options.type=='short_answer_partial_credit' || options.type=='short_answer_missing_word' || options.type=='multiple_choice_missing_word'|| options.type=='multiple_choice_partial_credit' || options.type=='multiple_choice' || options.type=='correspondance' || options.type=='description' || options.type=='true_false' || options.type=='numeric_intervals' || options.type=='numeric_intervals_partial_credit' || options.type=='numeric_margin' || options.type=='numeric_margin_partial_credit' || options.type=='open_question'){
+					
+					let listData = fs.readdirSync('SujetB_data');
+					let listQ=[];
+					let filepath;
+					let questionTrouvee=false;
+					for(let i=0; i<listData.length; i++){
+						filepath='SujetB_data/'+String(listData[i]);
+						listQ= listQ.concat(parseData(filepath));
+					}
+					if(options.type!="default" && options.titre!="default" && options.motcle!="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle) && listQ[i].type==options.type){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else if(options.type=="default" && options.titre!="default" && options.motcle!="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle)){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else if(options.type!="default" && options.titre=="default" && options.motcle!="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].type==options.type && listQ[i].enonce.includes(options.motcle)){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else if(options.type!="default" && options.titre!="default" && options.motcle=="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].titre.includes(options.titre) && listQ[i].type==options.type){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else if(options.type=="default" && options.titre=="default" && options.motcle!="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].enonce.includes(options.motcle)){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else if(options.type=="default" && options.titre!="default" && options.motcle=="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].titre.includes(options.titre)){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else if(options.type!="default" && options.titre=="default" && options.motcle=="default"){
+						for(let i=0; i<listQ.length; i++){
+							if(listQ[i].type==options.type){
+								questionTrouvee=true;
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
+							}
+						}
+					}else{
+						questionTrouvee=true;
+						for(let i=0; i<listQ.length; i++){
+								console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
+								console.log('\n \n');
 						}
 					}
-				}else if(options.type=="default" && options.titre!="default" && options.motcle!="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle)){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-						}
-					}
-				}else if(options.type!="default" && options.titre=="default" && options.motcle!="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].type==options.type && listQ[i].enonce.includes(options.motcle)){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-						}
-					}
-				}else if(options.type!="default" && options.titre!="default" && options.motcle=="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].titre.includes(options.titre) && listQ[i].type==options.type){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-						}
-					}
-				}else if(options.type=="default" && options.titre=="default" && options.motcle!="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].enonce.includes(options.motcle)){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-						}
-					}
-				}else if(options.type=="default" && options.titre!="default" && options.motcle=="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].titre.includes(options.titre)){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-						}
-					}
-				}else if(options.type!="default" && options.titre=="default" && options.motcle=="default"){
-					for(let i=0; i<listQ.length; i++){
-						if(listQ[i].type==options.type){
-							questionTrouvee=true;
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-						}
+					if(questionTrouvee==false){
+						console.log('Aucune question correspondant aux critères demandés trouvée');
 					}
 				}else{
-					questionTrouvee=true;
-					for(let i=0; i<listQ.length; i++){
-							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
-							console.log('\n \n');
-					}
+					console.log('Le type de question donné n existe pas. Les types de question possibles sont :\n short_answer \n short_answer_partial_credit \n short_answer_missing_word \n multiple_choice \n multiple_choice_partial_credit \n multiple_choice_missing_word \n numeric_intervals \n numeric_intervals_partial_credit \n numeric_margin \n numeric_margin_partial_credit \n correspondance \n true_false \n description \n open_question');
 				}
-				if(questionTrouvee==false){
-					console.log('Aucune question correspondant aux critères demandés trouvée');
-				}
-        } catch (error) {
+		} catch (error) {
             logger.error('parsage des fichiers impossible');
         }
     })
