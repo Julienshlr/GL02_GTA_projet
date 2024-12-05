@@ -41,7 +41,6 @@ Placez vous dans le répertoire du projet avec la commande :
 cd
 ```
 
-
 Installez les modules requis avec la commande :
 
 ```bash
@@ -75,7 +74,7 @@ node Cli.js <commande> --help
   
 
 ### Commandes principales
-
+##
 1.  Générer un fichier VCard
 
 Sans options
