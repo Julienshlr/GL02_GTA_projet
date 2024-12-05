@@ -87,7 +87,8 @@ node Cli.js vcard <prenom> <nom> <telephone> <email> --adresse <adresse> --outpu
 > [!NOTE]
 > Pour plus d'informations notamment concernant les formats des différents champs, référez-vous au Tip "Obtenir de l'aide sur une commande précise".
 ### 
-2. Rechercher une question selon un critère dans les données  
+2. Rechercher une question selon un critère dans les données
+  
 Rechercher le type et le titre de chaque question de la base de données
 ```bash
 node Cli.js recherche
