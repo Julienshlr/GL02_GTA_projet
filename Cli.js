@@ -19,7 +19,7 @@ function parseData(filePath) {
 		  if (analyzer.errorCount != 0) {
 			//console.log("The .gift file contains errors.");
 		  }
-			//console.log(analyzer.parsedQuestion);
+			
 		  return analyzer.parsedQuestion;
 }
 
@@ -327,11 +327,19 @@ cli
                 logger.error(`Erreur lors du parsing du fichier.`);
             }
         });
-    });
-
-
-
-
+    })
+	
+	.command("examen", "simuler un examen  à partir d'un fichier donné")
+    .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
+    .action(({ args, logger }) => {
+		try{
+			const filepath = path.resolve(args.file); // Résolution du chemin du fichier
+			let exam = parseData(filepath);
+			
+		}catch{
+			console.log("Fichier introuvable");
+		}
+	});
 
 
 cli.run(process.argv.slice(2));
