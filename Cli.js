@@ -199,6 +199,7 @@ cli
 				let listData = fs.readdirSync('SujetB_data');
 				let listQ=[];
 				let filepath;
+				let questionTrouvee=false;
 				for(let i=0; i<listData.length; i++){
 					filepath='SujetB_data/'+String(listData[i]);
 					listQ= listQ.concat(parseData(filepath));
@@ -206,6 +207,7 @@ cli
 				if(options.type!="default" && options.titre!="default" && options.motcle!="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle) && listQ[i].type==options.type){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
@@ -213,6 +215,7 @@ cli
 				}else if(options.type=="default" && options.titre!="default" && options.motcle!="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].titre.includes(options.titre) && listQ[i].enonce.includes(options.motcle)){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
@@ -220,6 +223,7 @@ cli
 				}else if(options.type!="default" && options.titre=="default" && options.motcle!="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].type==options.type && listQ[i].enonce.includes(options.motcle)){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
@@ -227,6 +231,7 @@ cli
 				}else if(options.type!="default" && options.titre!="default" && options.motcle=="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].titre.includes(options.titre) && listQ[i].type==options.type){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
@@ -234,6 +239,7 @@ cli
 				}else if(options.type=="default" && options.titre=="default" && options.motcle!="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].enonce.includes(options.motcle)){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
@@ -241,6 +247,7 @@ cli
 				}else if(options.type=="default" && options.titre!="default" && options.motcle=="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].titre.includes(options.titre)){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
@@ -248,15 +255,20 @@ cli
 				}else if(options.type!="default" && options.titre=="default" && options.motcle=="default"){
 					for(let i=0; i<listQ.length; i++){
 						if(listQ[i].type==options.type){
+							questionTrouvee=true;
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 						}
 					}
 				}else{
+					questionTrouvee=true;
 					for(let i=0; i<listQ.length; i++){
 							console.log('type:'+listQ[i].type+'\n titre:'+listQ[i].titre);
 							console.log('\n \n');
 					}
+				}
+				if(questionTrouvee==false){
+					console.log('Aucune question correspondant aux critères demandés trouvée');
 				}
         } catch (error) {
             logger.error('parsage des fichiers impossible');
