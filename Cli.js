@@ -192,7 +192,7 @@ cli
 
     // Commande pour chercher une question selon un critères dans la base de données
 	.command('recherche', 'Chercher une question selon un critere dans les données')
-	.option('--type <type>', 'type de question', { default: "default" })
+	.option('--type <type>', 'Les types de question possibles sont :\nshort_answer\nshort_answer_partial_credit\nshort_answer_missing_word\nmultiple_choice\nmultiple_choice_partial_credit\nmultiple_choice_missing_word\nnumeric_intervals\nnumeric_intervals_partial_credit\nnumeric_margin\nnumeric_margin_partial_credit\ncorrespondance\ntrue_false\ndescription\nopen_question', { default: "default" })
     .option('--titre <titre>', 'mot présent dans le titre de la question', { default: "default" })
 	.option('--motcle <motcle>', 'mots présents dans le texte', { default: "default" })
 	    .action(({ args, options, logger }) => {
