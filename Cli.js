@@ -31,9 +31,9 @@ cli
     .command('vcard', 'Génère un fichier VCard')
     .argument('<prenom>', 'Prénom de l\'enseignant')
     .argument('<nom>', 'Nom de l\'enseignant')
-    .argument('<telephone>', 'Numéro de téléphone')
-    .argument('<email>', 'Adresse email')
-    .option('--adresse <adresse>', 'Adresse complète', { default: "" })
+    .argument('<telephone>', 'Numéro de téléphone (xx xx xx xx xx)')
+    .argument('<email>', 'Adresse email (partieLocale@domaine.extension)')
+    .option('--adresse <adresse>', 'Adresse complète (numeroRue nomRue, ville codePostal)', { default: "" })
     .option('--uri <uri>', 'Lien vers un profil ou site web', { default: "" })
     .option('--output <nomFichier>', 'Nom du fichier de sortie (sans extension)', { default: "contact" })
     .action(({ args, options, logger }) => {
@@ -190,7 +190,8 @@ cli
 
     })
 
-	.command('recherche', 'cherche une question selon un critere dans les données')
+    // Commande pour chercher une question selon un critères dans la base de données
+	.command('recherche', 'Chercher une question selon un critere dans les données')
 	.option('--type <type>', 'type de question', { default: "default" })
     .option('--titre <titre>', 'mot présent dans le titre de la question', { default: "default" })
 	.option('--motcle <motcle>', 'mots présents dans le texte', { default: "default" })
@@ -282,7 +283,7 @@ cli
 
 
     // Commande pour générer un histogramme des types de questions
-    .command("generate-histogram", "Générer un histogramme des types de questions")
+    .command("generate-histogram", "Générer un histogramme des types de question")
     .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
     .action(({ args, logger }) => {
         const filePath = path.resolve(args.file); // Résolution du chemin du fichier
@@ -329,7 +330,8 @@ cli
         });
     })
 	
-	.command("examen", "simuler un examen  à partir d'un fichier donné")
+    // Commande pour faire passer un examen
+	.command("examen", "Simuler un examen  à partir d'un fichier donné")
     .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
     .action(({ args, logger }) => {
 		try{
