@@ -11,6 +11,9 @@
     "license": "",
     "dependencies": {
         "@caporal/core": "^3.0.2",
+        "caporal": "^1.4.0",
+        "fs": "^0.0.1-security",
+        "prompt-sync": "^4.2.0",
         "vega": "^5.17.0",
         "vega-lite": "^4.17.0"
     },
