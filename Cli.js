@@ -31,9 +31,9 @@ cli
     .command('vcard', 'Génère un fichier VCard')
     .argument('<prenom>', 'Prénom de l\'enseignant')
     .argument('<nom>', 'Nom de l\'enseignant')
-    .argument('<telephone>', 'Numéro de téléphone')
-    .argument('<email>', 'Adresse email')
-    .option('--adresse <adresse>', 'Adresse complète', { default: "" })
+    .argument('<telephone>', 'Numéro de téléphone (xx xx xx xx xx)')
+    .argument('<email>', 'Adresse email (partieLocale@domaine.extension)')
+    .option('--adresse <adresse>', 'Adresse complète (numeroRue nomRue, ville codePostal)', { default: "" })
     .option('--uri <uri>', 'Lien vers un profil ou site web', { default: "" })
     .option('--output <nomFichier>', 'Nom du fichier de sortie (sans extension)', { default: "contact" })
     .action(({ args, options, logger }) => {
@@ -190,8 +190,9 @@ cli
 
     })
 
-	.command('recherche', 'cherche une question selon un critere dans les données')
-	.option('--type <type>', 'type de question', { default: "default" })
+    // Commande pour chercher une question selon un critères dans la base de données
+	.command('recherche', 'Chercher une question selon un critere dans les données')
+	.option('--type <type>', 'Les types de question possibles sont :\nshort_answer\nshort_answer_partial_credit\nshort_answer_missing_word\nmultiple_choice\nmultiple_choice_partial_credit\nmultiple_choice_missing_word\nnumeric_intervals\nnumeric_intervals_partial_credit\nnumeric_margin\nnumeric_margin_partial_credit\ncorrespondance\ntrue_false\ndescription\nopen_question', { default: "default" })
     .option('--titre <titre>', 'mot présent dans le titre de la question', { default: "default" })
 	.option('--motcle <motcle>', 'mots présents dans le texte', { default: "default" })
 	    .action(({ args, options, logger }) => {
@@ -282,7 +283,7 @@ cli
 
 
     // Commande pour générer un histogramme des types de questions
-    .command("generate-histogram", "Générer un histogramme des types de questions")
+    .command("generate-histogram", "Générer un histogramme des types de question")
     .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
     .action(({ args, logger }) => {
         const filePath = path.resolve(args.file); // Résolution du chemin du fichier
@@ -329,6 +330,8 @@ cli
         });
     })
 	
+
+	// Commande pour faire passer un examen
 	.command("sim-exam", "simuler un examen  à partir d'un fichier donné")
     .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
     .action(({ args, logger }) => {

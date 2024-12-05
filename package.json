@@ -6,9 +6,9 @@
     "scripts": {
         "test": "jasmine"
     },
-    "keywords": [],
+    "keywords": ["node", "UTT", "GL02", "VCard", "GIFT"],
     "author": "GTA",
-    "license": "",
+    "license": "MIT",
     "dependencies": {
         "@caporal/core": "^3.0.2",
         "caporal": "^1.4.0",
