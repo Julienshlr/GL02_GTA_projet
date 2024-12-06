@@ -27,25 +27,44 @@ L'outil livré suit les différentes spécifications présentes dans le cahier d
 
 ### ABNF :
 Le format de données décrit pour les fichiers GIFT dans le cahier des charges ne correspondait pas entièrement aux données fournies et parfois également à la définition officielle du format GIFT.
-  Nous avons décidé de prioriser une fiabilité aux données fournies plutôt qu'au cahier des charges afin de pouvoir soumettre une application fonctionnelle. Il est cependant possible que certains cas présents dans les données soient mal traités car il aurait été long, fastidieux et peu efficace de vérifier cahcundes fichiers de données fournis. Nous nous sommes donc principalement appuyés sur la documentation officielle du format GIFT, disponible ici: https://docs.moodle.org/311/en/GIFT_format
-  Notre application traite 14 types de questions différents, certains étant des dérivés de ceux définis dans le cahier des charges. Ces types de questions sont: 
+
+Nous avons décidé de prioriser une fiabilité aux données fournies plutôt qu'au cahier des charges afin de pouvoir soumettre une application fonctionnelle. Il est cependant possible que certains cas présents dans les données soient mal traités car il aurait été long, fastidieux et peu efficace de vérifier cahcundes fichiers de données fournis. Nous nous sommes donc principalement appuyés sur la documentation officielle du format GIFT, disponible ici: https://docs.moodle.org/311/en/GIFT_format
+
+Notre application traite 14 types de questions différents, certains étant des dérivés de ceux définis dans le cahier des charges. Ces types de questions sont: 
+
 short_answer
+
 short_answer_partial_credit
+
 short_answer_missing_word
+
 multiple_choice
+
 multiple_choice_partial_credit
+
 multiple_choice_missing_word
+
 numeric_intervals
+
 numeric_intervals_partial_credit
+
 numeric_margin
+
 numeric_margin_partial_credit
+
 correspondance
+
 true_false
+
 description
+
 open_question
 
+
 En ommettant les cas non triatés dans le cahier des charges, les divergences au cahier des charges sont lieu pour: 
+
 Les questions vrai ou faux : TRUE et FALSE sont acceptés et non pas seulement T et F
+
 Les questions à choix multiples et donc les textes à trous tels qu'il sont définis dans le cahier des charges: ~= est accepté comme symbole signifiant une bonne réponse. Cette notation n'est pas définie dans la documentation officielle mais est fréquemment présente dans les données. 
 
 ### Initiatives prises :
