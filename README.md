@@ -26,9 +26,9 @@ L'outil livré suit les différentes spécifications présentes dans le cahier d
 - [ ] SPEC_NF_3 **Partiellement traitée** : nous n'avons pas accès à tous les systèmes d'exploitation afin d'effectuer les tests de portabilité mais il n'y a aucune raison que l'application ne fonctionne pas sur ces derniers.
 
 ### ABNF :
-Le format de données décrit pour les fichiers GIFT dans le cahier des charges ne correspondait pas entièrement aux données fournies et parfois également à la définition officielle du format GIFT.
+Le format des données décrit pour les fichiers GIFT dans le cahier des charges ne correspondait pas entièrement aux données fournies et parfois également à la définition officielle du format GIFT.
 
-Nous avons décidé de prioriser une fiabilité aux données fournies plutôt qu'au cahier des charges afin de pouvoir soumettre une application fonctionnelle. Il est cependant possible que certains cas présents dans les données soient mal traités car il aurait été long, fastidieux et peu efficace de vérifier cahcundes fichiers de données fournis. Nous nous sommes donc principalement appuyés sur la documentation officielle du format GIFT, disponible ici: https://docs.moodle.org/311/en/GIFT_format
+Nous avons décidé de prioriser une fiabilité aux données fournies plutôt qu'au cahier des charges afin de pouvoir soumettre une application fonctionnelle. Il est cependant possible que certains cas présents dans les données soient mal traités car il aurait été long, fastidieux et peu efficace de vérifier chacun des fichiers de données fournis. Nous nous sommes donc principalement appuyés sur la documentation officielle du format GIFT, disponible ici: https://docs.moodle.org/311/en/GIFT_format
 
 Notre application traite 14 types de questions différents, certains étant des dérivés de ceux définis dans le cahier des charges. Ces types de questions sont: 
 
@@ -61,11 +61,11 @@ description
 open_question
 
 
-En ommettant les cas non triatés dans le cahier des charges, les divergences au cahier des charges sont lieu pour: 
+En ommettant les cas non traités dans le cahier des charges, les divergences à ce dernier ont lieu pour: 
 
 Les questions vrai ou faux : TRUE et FALSE sont acceptés et non pas seulement T et F
 
-Les questions à choix multiples et donc les textes à trous tels qu'il sont définis dans le cahier des charges: ~= est accepté comme symbole signifiant une bonne réponse. Cette notation n'est pas définie dans la documentation officielle mais est fréquemment présente dans les données. 
+Les questions à choix multiples et donc les textes à trous tels qu'ils sont définis dans le cahier des charges: ~= est accepté comme symbole signifiant une bonne réponse. Cette notation n'est pas définie dans la documentation officielle mais est fréquemment présente dans les données. 
 
 ### Initiatives prises :
 
