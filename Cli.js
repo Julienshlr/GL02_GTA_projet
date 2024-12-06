@@ -463,7 +463,23 @@ cli
 						console.log('mauvaise réponse');
 					}
 					
-				}
+				}else if (exam[i].type === 'correspondance') {
+                   			const pairs = exam[i].reponsesCorrectes;
+                
+                   			console.log("Faites correspondre les éléments suivants :");
+                    			pairs.forEach((pair, index) => {
+                        			const [left, right] = pair.split('->').map(item => item.trim());
+                        			const a = prompt(`Quel est le correspondant de "${left}" ? `);
+                
+                        			if (a.toLowerCase() === right.toLowerCase()) {
+                            				console.log('Bonne réponse !');
+                            				score++;
+                        			}else{
+                            				console.log('Mauvaise réponse.');
+                        			}
+                    			});
+                
+                }
 					
 			}
 		}catch{
