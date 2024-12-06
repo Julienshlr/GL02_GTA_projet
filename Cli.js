@@ -730,9 +730,9 @@ cli
                 }
 				
 			}
-			console.log('L\'examen est terminé, vous avez obtenu une note de '+score);
+			logger.info('L\'examen est terminé, vous avez obtenu une note de '+score);
 		}catch{
-			console.log("ERREUR. Peut être que le fichier demandé n'existe pas");
+			logger.error("ERREUR. Peut être que le fichier demandé n'existe pas");
 		}
 	});
 
