@@ -486,9 +486,7 @@ cli
 						let rep='';
 						if(perfectAnswer==false){
 							while(data[h]!='%'){
-								console.log(data[h]);
 								pourcentage=pourcentage+data[h];
-								console.log(pourcentage);
 								h++;
 								
 							}
@@ -498,12 +496,14 @@ cli
 						}
 						
 						const posVal=h;
-						while(data[h]!=',' || h<data.length-1){
+						while(data[h]!=',' && h!=data.length){
 							if(data[h]==':'){
-								tolerance=data.slice(h+1,h+2);
+								const posTol=h+1;
 								rep=data.slice(posVal,h);
-								h++;
-								h++;
+								while(data[h]!=',' && h!=data.length){
+									h++;
+								}
+								tolerance=data.slice(posTol,h);
 								break;
 							}
 							h++;
@@ -515,9 +515,6 @@ cli
 						pourcentages.push(Number(pourcentage));
 						tolerances.push(Number(tolerance));
 					}
-					console.log(pourcentages);
-					console.log(tolerances);
-					console.log(repCorrectes);
 					const a = prompt('Entrez un nombre, votre note depend de sa precision :');
 					for (let h=0; h<repCorrectes.length; h++){
 						const inf=repCorrectes[h]-tolerances[h];
@@ -532,27 +529,216 @@ cli
 							}
 						}
 					}
+				}else if (exam[i].type=='numeric_intervals_partial_credit'){
+					let perfectAnswer=false;
+					let pourcentages=[];
+					let sups = [];
+					let infs = [];
+					let data=String(exam[i].reponsesCorrectes[0]);
+					let h=0;
+					while(h<data.length-1){
+						let perfectAnswer=false;
+						if(data[h]=='%'){
+							h++;
+						}else{
+							perfectAnswer=true;	
+						}
+						let pourcentage='';
+						
+						if(perfectAnswer==false){
+							while(data[h]!='%'){
+								pourcentage=pourcentage+data[h];
+								h++;
+								
+							}
+							h++;
+						}else{
+							pourcentage=100;
+						}
+						let inf='';
+						let sup='';
+						const posInf=h;
+						while(data[h]!=',' && h!=data.length){
+							if(data[h]=='.' && data[h+1]=='.'){
+								const posSup=h+2;
+								inf=data.slice(posInf,h);
+								while(data[h]!=',' && h!=data.length){
+									h++;
+								}
+								sup=data.slice(posSup,h);
+								break;
+							}
+							h++;
+						}
+						h++;
+						
+
+						sups.push(Number(sup));
+						pourcentages.push(Number(pourcentage));
+						infs.push(Number(inf));
+					}
+					const a = prompt('Entrez un nombre, votre note depend de sa precision :');
+					for (let h=0; h<sups.length; h++){
+						if(Number(a)<=sups[h] && Number(a)>=infs[h]){
+							console.log('bonne réponse, vous avez '+pourcentages[h]+'% des points');
+							score= score+(pourcentages[h]/100) ;
+							break;
+						}else{
+							if(h===(sups.length)-1){
+								console.log('mauvaise réponse');
+							}
+						}
+					}
+				}else if (exam[i].type=='short_answer_partial_credit'){
+					let perfectAnswer=false;
+					let pourcentages=[];
+					let reponses= [];
+					let data=String(exam[i].reponsesCorrectes[0]);
+					let h=0;
+					while(h<data.length-1){
+						let perfectAnswer=false;
+						if(data[h]=='%'){
+							h++;
+						}else{
+							perfectAnswer=true;	
+						}
+						let pourcentage='';
+						
+						if(perfectAnswer==false){
+							while(data[h]!='%'){
+								pourcentage=pourcentage+data[h];
+								h++;
+								
+							}
+							h++;
+						}else{
+							pourcentage=100;
+						}
+						const posRep=h;
+						while(data[h]!=',' && h!=data.length){
+							h++;
+						}
+						const rep= data.slice(posRep,h);
+						h++;
+						reponses.push(rep);
+						pourcentages.push(Number(pourcentage));
+					}
+					console.log('Une reponse partiellement correcte vous donnera une partie des points');
+					const a = prompt('Votre réponse:');
+					for (let h=0; h<reponses.length; h++){
+						if(a==reponses[h]){
+							console.log('bonne réponse, vous avez '+pourcentages[h]+'% des points');
+							score= score+(pourcentages[h]/100) ;
+							break;
+						}else{
+							if(h===(reponses.length)-1){
+								console.log('mauvaise réponse');
+							}
+						}
+					}
+				}else if (exam[i].type=='multiple_choice_partial_credit'){
+					let perfectAnswer=false;
+					let pourcentages=[];
+					let reponses= [];
+					let data=String(exam[i].options[0]);
+					let h=0;
+					while(h<data.length-1){
+						let perfectAnswer=false;
+						if(data[h]=='%'){
+							h++;
+							if (data[h]=='-'){
+								h++;
+							}
+						}else{
+							perfectAnswer=true;	
+						}
+						let pourcentage='';
+						
+						if(perfectAnswer==false){
+							while(data[h]!='%'){
+								pourcentage=pourcentage+data[h];
+								h++;
+								
+							}
+							h++;
+						}else{
+							pourcentage=100;
+						}
+						const posRep=h;
+						while(data[h]!=',' && h!=data.length){
+							h++;
+						}
+						const rep= data.slice(posRep,h);
+						h++;
+						reponses.push(rep);
+						pourcentages.push(Number(pourcentage));
+					}
+					console.log('Une reponse partiellement correcte vous donnera une partie des points');
+					console.log('Les reponses possibles sont:'+reponses+'\n');
+					const a = prompt('Votre réponse:');
+					for (let h=0; h<reponses.length; h++){
+						if(a==reponses[h] && pourcentages[h]!=0){
+							console.log('bonne réponse, vous avez '+pourcentages[h]+'% des points');
+							score= score+(pourcentages[h]/100) ;
+							break;
+						}else{
+							if(h===(reponses.length)-1){
+								console.log('mauvaise réponse');
+							}
+						}
+					}
 				}else if (exam[i].type === 'correspondance') {
-                   			const pairs = exam[i].reponsesCorrectes;
-                
-                   			console.log("Faites correspondre les éléments suivants :");
-                    			pairs.forEach((pair, index) => {
-                        			const [left, right] = pair.split('->').map(item => item.trim());
-                        			const a = prompt(`Quel est le correspondant de "${left}" ? `);
-                
-                        			if (a.toLowerCase() === right.toLowerCase()) {
-                            				console.log('Bonne réponse !');
-                            				score++;
-                        			}else{
-                            				console.log('Mauvaise réponse.');
-                        			}
-                    			});
+					let options = [];
+					let reponses = [];
+					let data=String(exam[i].reponsesCorrectes[0]);
+					let h=0;
+					while(h<data.length-1){
+						let optn='';
+						let rep='';
+						while(data[h]==' '){
+							h++;
+						}
+						const posOptn=h;
+						while(data[h]!=',' && h!=data.length){
+							if(data[h]=='-' && data[h+1]=='>'){
+								optn=data.slice(posOptn,h);
+								h++;
+								h++;
+								while(data[h]==' '){
+									h++;
+								}
+								const posRep=h;
+								
+								while(data[h]!=',' && h!=data.length){
+									h++;
+								}
+								rep=data.slice(posRep,h);
+								break;
+							}
+							h++;
+						}
+						h++;
+						reponses.push(rep);
+						options.push(optn);
+					}
+					for (let h=0; h<reponses.length; h++){
+						console.log(options[h]);
+						const a = prompt('Votre réponse:');
+						if(a==reponses[h]){
+							console.log('bonne réponse');
+							score++ ;
+						}else{
+							console.log('mauvaise réponse');
+						}
+					}
+					
                 
                 }
 				
 			}
+			console.log('L examen est terminé, vous avez obtenu une note de '+score);
 		}catch{
-			console.log("Fichier introuvable");
+			console.log("ERREUR. Peut être que le fichier demandé n'existe pas");
 		}
 	});
 
