@@ -9,9 +9,9 @@ describe("Tests pour StatsGenerateur", function () {
             error: jasmine.createSpy("error"),
         };
         // Assurez-vous que le répertoire existe
-        const dir = path.dirname('./graphiques');
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+        const directoryPath = path.join(__dirname, '../graphiques');
+        if (!fs.existsSync(directoryPath)) {
+            fs.mkdirSync(directoryPath, { recursive: true });
         }
     });
 
