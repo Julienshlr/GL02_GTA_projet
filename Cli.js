@@ -426,14 +426,18 @@ cli
 					}
 				}else if (exam[i].type=='numeric_margin'){
 					let tolerance=0;
-					for(let j=0; j<exam[i].reponsesCorrectes[0].length; j++){
-						if(exam[i].reponsesCorrectes[0][j]==':'){
-							tolerance=exam[i].reponsesCorrectes[0][j+1];
+					let q=String(exam[i].reponsesCorrectes[0])
+					for(let j=0; j<q.length; j++){
+						if(q[j]==':'){
+							tolerance=q.slice(j+1);
+							q=q.slice(0,j);
 							break;
 						}
 					}
 					const a = prompt('Entrez un nombre, la marge d erreur qui vous est accordée est de'+tolerance+': ');
-					if(exam[i].reponsesCorrectes[0]==a+':'+tolerance){
+					const inf=Number(q)-Number(tolerance);
+					const sup=Number(q)+Number(tolerance);
+					if(Number(a)<sup && Number(a)>inf){
 						console.log('bonne réponse');
 						score++;
 					}else{
@@ -444,27 +448,90 @@ cli
 					let inf='';
 					let sup='';
 					let j=0;
-					while(exam[i].reponsesCorrectes[0][j]=='.' && exam[i].reponsesCorrectes[0][j+1]=='.'){
-						inf.push(exam[i].reponsesCorrectes[0][j]);
+					let q=String(exam[i].reponsesCorrectes[0])
+					while(q[j]=='.' && q[j+1]=='.'){
+						inf=inf+q[j];
 					}
 					j=j+2;
-					while(j<exam[i].reponsesCorrectes[0].length){
-						sup.push(exam[i].reponsesCorrectes[0][j]);
+					while(j<q.length){
+						sup=sup+q[j];
 					}
-					inf=inf.join('');
 					inf=Number(inf);
-					sup=sup.join('');
 					sup=Number(sup);
-					const a = prompt('Entrez un nombre, une certaine marge d erreur vous est autorisée');
-					if(Number(exam[i].reponsesCorrectes[0])<sup && Number(exam[i].reponsesCorrectes[0])>inf){
+					const a = prompt('Entrez un nombre, une certaine marge d erreur vous est autorisée:');
+					if(Number(a)<sup && Number(a)>inf){
 						console.log('bonne réponse');
 						score++;
 					}else{
 						console.log('mauvaise réponse');
 					}
 					
+				}else if (exam[i].type=='numeric_margin_partial_credit'){
+					let tolerance=0;
+					let perfectAnswer=false;
+					let repCorrectes=[];
+					let pourcentages=[];
+					let tolerances = [];
+					let data=String(exam[i].reponsesCorrectes[0]);
+					let h=0;
+					while(h<data.length-1){
+						let perfectAnswer=false;
+						if(data[h]=='%'){
+							h++;
+						}else{
+							perfectAnswer=true;	
+						}
+						let pourcentage='';
+						let rep='';
+						if(perfectAnswer==false){
+							while(data[h]!='%'){
+								console.log(data[h]);
+								pourcentage=pourcentage+data[h];
+								console.log(pourcentage);
+								h++;
+								
+							}
+							h++;
+						}else{
+							pourcentage=100;
+						}
+						
+						const posVal=h;
+						while(data[h]!=',' || h<data.length-1){
+							if(data[h]==':'){
+								tolerance=data.slice(h+1,h+2);
+								rep=data.slice(posVal,h);
+								h++;
+								h++;
+								break;
+							}
+							h++;
+						}
+						h++;
+						
+
+						repCorrectes.push(Number(rep));
+						pourcentages.push(Number(pourcentage));
+						tolerances.push(Number(tolerance));
+					}
+					console.log(pourcentages);
+					console.log(tolerances);
+					console.log(repCorrectes);
+					const a = prompt('Entrez un nombre, votre note depend de sa precision :');
+					for (let h=0; h<repCorrectes.length; h++){
+						const inf=repCorrectes[h]-tolerances[h];
+						const sup=repCorrectes[h]+tolerances[h];
+						if(Number(a)<=sup && Number(a)>=inf){
+							console.log('bonne réponse, vous avez '+pourcentages[h]+'% des points');
+							score= score+(pourcentages[h]/100) ;
+							break;
+						}else{
+							if(h===(repCorrectes.length)-1){
+								console.log('mauvaise réponse');
+							}
+						}
+					}
 				}
-					
 			}
 		}catch{
 			console.log("Fichier introuvable");
