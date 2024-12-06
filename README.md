@@ -21,13 +21,17 @@ L'outil livré suit les différentes spécifications présentes dans le cahier d
 - [x] SPEC7
 - [x] SPEC8
 
+- [ ] SPEC_NF_1 **Partiellement traitée** : l'application n'a pas un temps d'exécution élevé mais ne possède pas de seuil (de temps de réponse) configurable avec affichage d'un message d'erreur si ce seuil est dépassé.
+- [x] SPEC_NF_2
+- [ ] SPEC_NF_3 **Partiellement traitée** : nous n'avons pas accès à tous les systèmes d'exploitation afin d'effectuer les tests de portabilité mais il n'y a aucune raison que l'application ne fonctionne pas sur ces derniers.
+
 ### ABNF :
 
 
 
 ### Initiatives prises :
 
-Quelques initiatives ont été prise afin d'assurer le bon fonctionnement de l'application.
+Quelques initiatives ont été prises afin d'assurer le bon fonctionnement de l'application.
 
 Tout d'abord concernant le parseur, comme mentionné dans la section ABNF, des types de question manquaient dans le cahier des charges par rapport à la base de données. Nous avons donc dû ajouter des types de question en plus de ceux fournis dans le cahier des charges pour que le parseur puisse fonctionner sans problème.  
 Une commande permettant de lister les questions d'un examen en cours de création a été ajoutée pour simplifier la visualtion.  
@@ -35,7 +39,7 @@ Pour finir, la vérification des contraintes liées à la création d'un examen 
 
 ## Installation
 
-Placez vous dans le répertoire du projet avec la commande :
+Placez-vous dans le répertoire du projet avec la commande :
 
 ```bash
 cd
@@ -50,7 +54,7 @@ npm install
 ## Utilisation
 
 > [!IMPORTANT]
-> Vérifiez que vous vous situez bien dans le répertoire du projet avec la commande :
+> Vérifiez que vous êtes bien dans le répertoire du projet avec la commande :
 
 ```bash
 pwd
