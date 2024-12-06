@@ -27,8 +27,8 @@ L'outil livré suit les différentes spécifications présentes dans le cahier d
 
 ### ABNF :
 Le format de données décrit pour les fichiers GIFT dans le cahier des charges ne correspondait pas entièrement aux données fournies et parfois également à la définition officielle du format GIFT.
-Nous avons décidé de prioriser une fiabilité aux données fournies plutôt qu'au cahier des charges afin de pouvoir soumettre une application fonctionnelle. Il est cependant possible que certains cas présents dans les données soient mal traités car il aurait été long, fastidieux et peu efficace de vérifier cahcundes fichiers de données fournis. Nous nous sommes donc principalement appuyés sur la documentation officielle du format GIFT, disponible ici: https://docs.moodle.org/311/en/GIFT_format
-Notre application traite 14 types de questions différents, certains étant des dérivés de ceux définis dans le cahier des charges. Ces types de questions sont: 
+  Nous avons décidé de prioriser une fiabilité aux données fournies plutôt qu'au cahier des charges afin de pouvoir soumettre une application fonctionnelle. Il est cependant possible que certains cas présents dans les données soient mal traités car il aurait été long, fastidieux et peu efficace de vérifier cahcundes fichiers de données fournis. Nous nous sommes donc principalement appuyés sur la documentation officielle du format GIFT, disponible ici: https://docs.moodle.org/311/en/GIFT_format
+  Notre application traite 14 types de questions différents, certains étant des dérivés de ceux définis dans le cahier des charges. Ces types de questions sont: 
 short_answer
 short_answer_partial_credit
 short_answer_missing_word
