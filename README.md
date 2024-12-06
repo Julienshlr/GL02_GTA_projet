@@ -186,7 +186,7 @@ node Cli.js generate-histogram <chemin du fichier>
  ###
 8. Simuler un examen sur le terminal à partir d'un fichier GIFT
 ```bash
-node Cli.jssim-exam <chemin du fichier>
+node Cli.js sim-exam <chemin du fichier>
 ```
 ###
 > [!NOTE]
