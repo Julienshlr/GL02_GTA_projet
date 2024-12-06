@@ -332,7 +332,7 @@ cli
 	
 
 	// Commande pour faire passer un examen
-	.command("sim-exam", "simuler un examen  à partir d'un fichier donné")
+	.command("sim-exam", "Simuler un examen  à partir d'un fichier donné")
     .argument("<file>", "Chemin du fichier GIFT, exemple : ./examens/test/test.gift")
     .action(({ args, logger }) => {
 		try{
@@ -733,7 +733,7 @@ cli
                 }
 				
 			}
-			console.log('L examen est terminé, vous avez obtenu une note de '+score);
+			console.log('L\'examen est terminé, vous avez obtenu une note de '+score);
 		}catch{
 			console.log("ERREUR. Peut être que le fichier demandé n'existe pas");
 		}
