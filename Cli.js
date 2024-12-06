@@ -340,9 +340,6 @@ cli
 			let exam = parseData(filePath);
 			let score=0
 			for(let i=0; i<exam.length; i++){
-				console.log(exam[i].enonce);
-				console.log(exam[i].reponsesCorrectes);
-				console.log(exam[i].options);
 				if (exam[i].type=='multiple_choice'){
 					console.log('\n Les choix possibles sont: \n'+exam[i].options);
 					const a = prompt('Votre réponse: ');
