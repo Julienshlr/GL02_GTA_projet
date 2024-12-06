@@ -234,7 +234,6 @@ GiftParser.prototype.answers = function(input){
     if (this.check('}', input)){
 		input=this.deleteFeedback(input);
         input = this.reduce(input);
-        Question.nbOpenQuestion++;
         return { tq: "open_question", ca: [], choices: [], in: input};
     }
 
@@ -300,7 +299,6 @@ GiftParser.prototype.answers = function(input){
         input = this.reduce(input);
 		input=this.deleteFeedback(input);
         input = this.reduce(input);
-        Question.nbTrueFalse++;
         return {tq: "true_false", ca: correct_answers, choices: choices, in: input};
     }
 	if (input.startsWith('TRUE')){
@@ -420,7 +418,6 @@ GiftParser.prototype.answers = function(input){
 				}
             } else {
                 type_question = "short_answer_missing_word";
-                Question.nbMissingWord++;
             }
         } else{
 			if(type_question!='short_answer_partial_credit'){ 

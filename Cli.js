@@ -340,6 +340,7 @@ cli
 			let exam = parseData(filePath);
 			let score=0
 			for(let i=0; i<exam.length; i++){
+				console.log(exam[i].enonce);
 				if (exam[i].type=='multiple_choice'){
 					console.log('\n Les choix possibles sont: \n'+exam[i].options);
 					const a = prompt('Votre réponse: ');
@@ -377,14 +378,12 @@ cli
 					
 					if(exam[i].reponsesCorrectes.length>1){
 						for(let j=0; j<exam[i].reponsesCorrectes.length; j++){
-							const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade n°'+j+' ? : ');
+							const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade n°'+(j+1)+' ? : ');
 							if(exam[i].reponsesCorrectes[j].includes(a)){
 								console.log('bonne réponse');
 								score++;
 							}else{
-								if(j==exam[i].reponsesCorrectes.length-1){
-									console.log('mauvaise réponse');
-								}
+								console.log('mauvaise réponse');
 							}
 						}	
 					}else{
@@ -396,19 +395,17 @@ cli
 							console.log('mauvaise réponse');
 						}
 					}
-				}else if (exam[i].type=='multiple_choices_missing_word'){
-					
+				}else if (exam[i].type=='multiple_choice_missing_word'){
 					if(exam[i].reponsesCorrectes.length>1){
 						for(let j=0; j<exam[i].reponsesCorrectes.length; j++){
 							console.log('\n Les choix possibles sont: \n'+exam[i].options[j]);
-							const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade n°'+j+' ? : ');
+							const a = prompt('Quel mot(s) doivent être placés à l emplacement de l accolade n°'+(j+1)+' ? : ');
 							if(exam[i].reponsesCorrectes[j].includes(a)){
 								console.log('bonne réponse');
 								score++;
 							}else{
-								if(j==exam[i].reponsesCorrectes.length-1){
-									console.log('mauvaise réponse');
-								}
+								console.log('mauvaise réponse');
+								
 							}
 						}	
 					}else{
