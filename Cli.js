@@ -340,7 +340,10 @@ cli
 			let exam = parseData(filePath);
 			let score=0
 			for(let i=0; i<exam.length; i++){
-				console.log(exam[i].enonce);
+				// Nettoyer l'énoncé avant l'affichage
+				const enonceNettoye = nettoyerEnonce(exam[i].enonce);
+				console.log(enonceNettoye);
+
 				if (exam[i].type=='multiple_choice'){
 					console.log('\n Les choix possibles sont: \n'+exam[i].options);
 					const a = prompt('Votre réponse: ');
@@ -735,6 +738,16 @@ cli
 			logger.error("ERREUR. Peut être que le fichier demandé n'existe pas");
 		}
 	});
+
+	function nettoyerEnonce(enonce) {
+		// Supprimer les balises HTML
+		enonce = enonce.replace(/<[^>]*>/g, '');
+		// Remplacer les accolades par des caractères soulignés
+		enonce = enonce.replace(/[\{\}]/g, '_');
+		// Supprimer les espaces inutiles
+		return enonce.trim();
+	}
+	
 
 
 cli.run(process.argv.slice(2));

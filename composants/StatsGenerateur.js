@@ -23,14 +23,23 @@ StatsGenerateur.prototype.createHistogram = function(data, outputFileName, logge
             Count: count,
         }));
 
+        // StatsGenerateur.js
         const chartSpec = {
             data: { values: histogramData },
+            width: 800, // Augmenter la largeur du graphique
+            height: 400,
             mark: 'bar',
             encoding: {
                 x: {
                     field: 'QuestionType',
-                    type: 'ordinal',
-                    axis: { title: 'Type de question' },
+                    type: 'nominal',
+                    axis: {
+                        title: 'Type de question',
+                        labelAngle: -45, // Incliner les étiquettes à -45 degrés
+                        labelFontSize: 12,
+                        labelLimit: 300 // Éviter que les étiquettes soient tronquées
+                    },
+                    sort: null,
                 },
                 y: {
                     field: 'Count',
@@ -40,23 +49,24 @@ StatsGenerateur.prototype.createHistogram = function(data, outputFileName, logge
             },
         };
 
-        const compiledChart = vegalite.compile(chartSpec).spec;
-        const runtime = vg.parse(compiledChart);
-        const view = new vg.View(runtime).renderer('svg').run();
 
-        view
-            .toSVG()
-            .then((svg) => {
-                fs.writeFileSync(outputFileName, svg);
-                view.finalize();
-                resolve(); // Signale la fin de la création
-            })
-            .catch((err) => {
-                logger.error(`Erreur lors de la génération du graphique : ${err.message}`);
-                reject(err); // Signale l'erreur
+                const compiledChart = vegalite.compile(chartSpec).spec;
+                const runtime = vg.parse(compiledChart);
+                const view = new vg.View(runtime).renderer('svg').run();
+
+                view
+                    .toSVG()
+                    .then((svg) => {
+                        fs.writeFileSync(outputFileName, svg);
+                        view.finalize();
+                        resolve(); // Signale la fin de la création
+                    })
+                    .catch((err) => {
+                        logger.error(`Erreur lors de la génération du graphique : ${err.message}`);
+                        reject(err); // Signale l'erreur
+                    });
             });
-    });
-};
+        };
 
 
 module.exports = StatsGenerateur;
