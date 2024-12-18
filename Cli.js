@@ -80,27 +80,33 @@ cli
             }
     
             const contenu = fs.readFileSync(cheminFichier, 'utf-8');
-            const regexQuestion = new RegExp(`::${args.titreQuestion}::.*?(?=\\n::|\\n$|$)`, 's');
-            const questionTrouvee = contenu.match(regexQuestion);
+			//pour trouver toutes les questions avec le titre spécifié
+			const regexQuestion = new RegExp(`::${args.titreQuestion}::[^{}]*{[^{}]*}`, 'g');
+            const questionsTrouvees = contenu.match(regexQuestion);
     
-            if (!questionTrouvee) {
+            if (!questionsTrouvees) {
                 logger.error(`La question avec le titre "${args.titreQuestion}" est introuvable dans ${args.fichier}.gift.`);
                 return;
             }
 
-            if (contenuTemp.includes(args.titreQuestion)) {
-                logger.error(`La question "${args.titreQuestion}" existe déjà dans l'examen en cours de création.`);
+        
+			
+			//Permet de trouver la question pas encoree ajoutée(problème de doublon de titre mais pas de contenu)
+            let nouvelleQuestion = null;
+            for (const question of questionsTrouvees) {
+                const questionNettoyee = question.trim();
+
+                if (!contenuTemp.includes(questionNettoyee)) {
+                    nouvelleQuestion = questionNettoyee;
+                    break;
+                }
+            }
+
+
+            if (!nouvelleQuestion) {
+                logger.error(`Toutes les questions avec le titre "${args.titreQuestion}" existent déjà dans l'examen en cours de création.`);
                 return;
             }
-    
-            // Ajouter la question au fichier temporaire après nettoyage
-            let nouvelleQuestion = questionTrouvee[0].trim();
-    
-            // Supprimer les lignes qui commencent par '//'
-            nouvelleQuestion = nouvelleQuestion
-                .split('\n')                     // Découpe la question en lignes
-                .filter(line => !line.trim().startsWith('//')) // Exclut les lignes commençant par //
-                .join('\n');                    // Reconstruit la question sans ces lignes
     
             const ajoutReussi = collectionExamen.ajouterQuestionTemp(nouvelleQuestion);
     
