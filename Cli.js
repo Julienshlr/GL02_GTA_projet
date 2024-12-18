@@ -12,15 +12,15 @@ const chartStats = new StatsGenerateur();
 
 
 function parseData(filePath) {
-  const data = fs.readFileSync(filePath, 'utf8');  
+	try {
+  		  const data = fs.readFileSync(filePath, 'utf8');  
 		  let analyzer = new GiftParser(false, false);
-		  analyzer.parse(data);
-
-		  if (analyzer.errorCount != 0) {
-			//console.log("The .gift file contains errors.");
-		  }
-			
+		  analyzer.parse(data);		
 		  return analyzer.parsedQuestion;
+		}
+		catch (error) {
+			throw new Error(`Le fichier GIFT contient des erreurs et ne peut pas être traité.`);
+    }
 }
 
 
@@ -79,12 +79,18 @@ cli
                 return;
             }
     
-            const contenu = fs.readFileSync(cheminFichier, 'utf-8');
+			let exam;
+            try {
+                exam = parseData(cheminFichier);
+            } catch (error) {
+                logger.error(error.message);
+                return;
+            }
 			//pour trouver toutes les questions avec le titre spécifié
-			const regexQuestion = new RegExp(`::${args.titreQuestion}::[^{}]*{[^{}]*}`, 'g');
-            const questionsTrouvees = contenu.match(regexQuestion);
+			
+            const questionsTrouvees = exam.filter(q => q.titre === args.titreQuestion);
     
-            if (!questionsTrouvees) {
+            if (questionsTrouvees.length===0) {
                 logger.error(`La question avec le titre "${args.titreQuestion}" est introuvable dans ${args.fichier}.gift.`);
                 return;
             }
@@ -94,7 +100,7 @@ cli
 			//Permet de trouver la question pas encoree ajoutée(problème de doublon de titre mais pas de contenu)
             let nouvelleQuestion = null;
             for (const question of questionsTrouvees) {
-                const questionNettoyee = question.trim();
+                const questionNettoyee = question.enonce.trim();
 
                 if (!contenuTemp.includes(questionNettoyee)) {
                     nouvelleQuestion = questionNettoyee;
