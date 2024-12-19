@@ -749,8 +749,48 @@ cli
 		}catch{
 			logger.error("ERREUR. Peut être que le fichier demandé n'existe pas");
 		}
+	})
+
+	// Commande pour comparer deux examens
+	.command("compare-exams", "Comparer les profils de deux examens")
+	.argument("<file1>", "Chemin du premier fichier GIFT")
+	.argument("<file2>", "Chemin du second fichier GIFT")
+	.action(({ args, logger }) => {
+		const directoryPath = path.join(__dirname, 'graphiques');
+		if (!fs.existsSync(directoryPath)) {
+			fs.mkdirSync(directoryPath, { recursive: true });
+		}
+	
+		const filePath1 = path.resolve(args.file1);
+		const filePath2 = path.resolve(args.file2);
+	
+		// Charger et analyser les deux fichiers
+		const exam1 = parseData(filePath1);
+		const exam2 = parseData(filePath2);
+	
+		// Compter les types de questions
+		const questionTypesCount1 = countQuestionTypes(exam1);
+		const questionTypesCount2 = countQuestionTypes(exam2);
+	
+		// Définir le chemin du fichier de sortie dans 'graphiques'
+		const outputFileName = path.join(directoryPath, `comparison_chart_${Date.now()}.svg`);
+	
+		// Générer le graphique comparatif
+		chartStats.createComparisonChart(questionTypesCount1, questionTypesCount2, outputFileName, logger)
+			.then(() => { logger.info(`Graphique comparatif généré avec succès : ${outputFileName}`); })
+			.catch(err => { logger.error(`Erreur lors de la génération du graphique comparatif : ${err.message}`); });
 	});
 
+	
+	function countQuestionTypes(exam) {
+		const counts = {};
+		exam.forEach(question => {
+			if (question.type) {
+				counts[question.type] = (counts[question.type] || 0) + 1;
+			}
+		});
+		return counts;
+	}
 	function nettoyerEnonce(enonce) {
 		// Supprimer les balises HTML
 		enonce = enonce.replace(/<[^>]*>/g, '');
