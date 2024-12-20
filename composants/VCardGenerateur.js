@@ -10,12 +10,13 @@ VCardGenerateur.prototype.validerNomPrenom = function(valeur) {
 };
 
 VCardGenerateur.prototype.validerTelephone = function(valeur) {
-    // Valide un numéro sous la forme 5 blocs de 2 chiffres séparés par un espace
-    return /^(\d{2}\s){4}\d{2}$/.test(valeur);
+    // Valide divers formats de numéros de téléphone internationaux
+    return /^\+?[0-9\s\-().]{7,20}$/.test(valeur);
 };
 
 VCardGenerateur.prototype.validerEmail = function(valeur) {
-    return /^[\da-zA-ZÀ-ÖØ-öø-ÿ._-]+@[\da-zA-ZÀ-ÖØ-öø-ÿ]+\.[\da-zA-ZÀ-ÖØ-öø-ÿ]+$/.test(valeur);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(valeur);
 };
 
 VCardGenerateur.prototype.validerAdresse = function(valeur) {

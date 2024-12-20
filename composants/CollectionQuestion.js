@@ -34,7 +34,10 @@ CollectionQuestions.prototype.retirerQuestionTemp = function (titre) {
         const contenuTemp = fs.readFileSync(this.tempFile, 'utf-8');
 
         // Expression régulière pour capturer la question avec son contexte
-        const regexQuestion = new RegExp(`(?:^|\\n)(::${titre}::.*?)(?:::|$)`, 's');
+        // Expression régulière améliorée pour capturer la question avec son contexte
+        // Échapper les caractères spéciaux dans le titre
+        const titreEscaped = titre.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        const regexQuestion = new RegExp(`(?:^|\\n)(::${titreEscaped}::.*?\\})`, 's');
         const match = contenuTemp.match(regexQuestion);
 
         if (!match) {
